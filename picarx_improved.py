@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 import time
-import atexit
 from math import tan, pi
 
 try :
@@ -163,7 +162,7 @@ def stop():
     set_motor_speed(1, 0)
     set_motor_speed(2, 0)
 
-atexit.register(stop)
+
 
 def Get_distance():
     timeout=0.01
@@ -200,6 +199,12 @@ def test():
     # set_motor_speed(1, 1)
     # set_motor_speed(2, 1)
     # camera_servo_pin.angle(0)
+
+def manual_motor_shutdown():
+    stop()
+    
+import atexit
+atexit.register(stop)
 
 
 

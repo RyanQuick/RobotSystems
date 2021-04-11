@@ -25,4 +25,3 @@ def move_forward(direction,speed):
 if __name__ == "__main__":
     while True:
         move_forward(0,1)  
-        break
