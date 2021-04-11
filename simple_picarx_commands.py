@@ -18,6 +18,7 @@ import picarx_improved
 
 
 # dir_servo_angle_calibration(0)
+picarx_improved.dir_servo_angle_calibration(30)
 def move_forward(direction,speed):
     picarx_improved.set_dir_servo_angle(direction)
     picarx_improved.forward(speed)
