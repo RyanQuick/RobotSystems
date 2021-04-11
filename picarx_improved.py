@@ -3,7 +3,8 @@ import atexit
 from math import tan, pi
 
 try :
-    from ezblock import *
+    from ezblock import __reset_mcu__
+    
     __reset_mcu__()
     time.sleep(0.01)
 except ImportError :
