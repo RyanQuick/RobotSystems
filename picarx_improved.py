@@ -190,9 +190,9 @@ def Get_distance():
     #print(cm)
     return cm
      
-def test():
+# def test():
     # dir_servo_angle_calibration(-10) 
-    set_dir_servo_angle(-40)
+    # set_dir_servo_angle(-40)
     # time.sleep(1)
     # set_dir_servo_angle(0)
     # time.sleep(1)
