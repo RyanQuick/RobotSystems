@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import time
 import atexit
 from math import tan, pi
@@ -144,9 +146,13 @@ def backward(speed):
     set_motor_speed(2, speed)
 
 def forward(speed):
-    turn_radius = 9.5/tan(dir_cal_value/ pi* 180)
-    angle_vel = speed/turn_radius
-    motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
+    theta = 0
+    if theta != 0:
+        turn_radius = 9.5/tan(dir_cal_value/ pi* 180)
+        angle_vel = speed/turn_radius
+        motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
+    else:
+        motor_speed = [speed,speed]
     
     
     set_motor_speed(1, -1*motor_speed[0])

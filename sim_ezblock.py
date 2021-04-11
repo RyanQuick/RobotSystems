@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 
 class Servo():
     def __init__(self, pwm):
