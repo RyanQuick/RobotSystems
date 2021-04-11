@@ -18,10 +18,11 @@ import picarx_improved
 
 
 # dir_servo_angle_calibration(0)
-def move_forward():
-    picarx_improved.forward(1)
+def move_forward(direction,speed):
+    picarx_improved.set_dir_servo_angle(direction)
+    picarx_improved.forward(speed)
 
 if __name__ == "__main__":
     while True:
-        move_forward()  
+        move_forward(0,1)  
         break

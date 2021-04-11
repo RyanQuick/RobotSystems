@@ -6,6 +6,7 @@ from math import tan, pi
 
 try :
     from ezblock import __reset_mcu__
+    from ezblock import *
     
     __reset_mcu__()
     time.sleep(0.01)
