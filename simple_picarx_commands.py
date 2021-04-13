@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 
-import picarx_improved
 
-import time
 from math import tan, pi
 
 try :
@@ -18,6 +16,10 @@ except ImportError :
            . Shadowing hardware calls with substitute functions ")
     from sim_ezblock import *
 
+
+import picarx_improved
+
+import time
 
 # import sys
 # sys.path.append(r'/opt/ezblock')
@@ -40,8 +42,6 @@ def move_forward(direction,speed):
     picarx_improved.set_dir_servo_angle(direction)
     # picarx_improved.forward(speed)
     print('direction: ', direction, 'speed: ', speed)
-    
-    pass
     
     
     
