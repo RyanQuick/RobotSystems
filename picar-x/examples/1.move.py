@@ -31,6 +31,5 @@ def forever():
   delay(2000)
 
 if __name__ == "__main__":
-    #while True:
-        #forever()
-    pass
+    while True:
+        forever()
