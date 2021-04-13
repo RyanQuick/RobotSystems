@@ -30,9 +30,9 @@ def pl_park(speed,length, direction=-1):
     time.sleep(.1)
     picarx_improved.set_dir_servo_angle(direction*50)
     picarx_improved.backward(speed)
-    time.sleep(length/2)
+    time.sleep(length*.55)
     picarx_improved.set_dir_servo_angle(-direction*50)
-    time.sleep(length/2)
+    time.sleep(length*.45)
         
         
     

@@ -142,12 +142,19 @@ def set_power(speed):
     set_motor_speed(2, speed) 
 
 def backward(speed):
-    set_motor_speed(1, speed)
-    set_motor_speed(2, speed)
+    if dir_cal_value != 0:
+        turn_radius = 9.5/tan(dir_cal_value/ pi* 180)
+        angle_vel = speed/turn_radius
+        motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
+    else:
+        motor_speed = [speed,speed]
+    
+    
+    set_motor_speed(1, motor_speed[0])
+    set_motor_speed(2, motor_speed[1])
 
 def forward(speed):
-    theta = 0
-    if theta != 0:
+    if dir_cal_value != 0:
         turn_radius = 9.5/tan(dir_cal_value/ pi* 180)
         angle_vel = speed/turn_radius
         motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
