@@ -192,7 +192,7 @@ def Get_distance():
      
 def test():
     camera_servo1_angle_calibration(10)
-    camera_servo2_angle_calibration(10)
+    camera_servo2_angle_calibration(15)
     dir_servo_angle_calibration(-10) 
     set_dir_servo_angle(-40)
     time.sleep(1)
