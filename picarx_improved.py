@@ -144,6 +144,7 @@ def set_power(speed):
 def backward(speed):
     if dir_cal_value != 0:
         turn_radius = 9.5/tan(dir_cal_value/ pi* 180)
+        print('turn_radius: ',turn_radius)
         angle_vel = speed/turn_radius
         motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
     else:
@@ -152,6 +153,7 @@ def backward(speed):
     
     set_motor_speed(1, motor_speed[0])
     set_motor_speed(2, motor_speed[1])
+    print("left speed", motor_speed[0],"right speed", motor_speed[1],)
 
 def forward(speed):
     if dir_cal_value != 0:
@@ -164,6 +166,7 @@ def forward(speed):
     
     set_motor_speed(1, -1*motor_speed[0])
     set_motor_speed(2, -1*motor_speed[1])
+    print("left speed", -1*motor_speed[0],"right speed", -1*motor_speed[1],)
 
 def stop():
     set_motor_speed(1, 0)
