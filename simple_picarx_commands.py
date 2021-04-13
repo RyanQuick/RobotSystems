@@ -48,8 +48,8 @@ def move_forward(direction,speed):
 if __name__ == "__main__":
     picarx_improved.dir_servo_angle_calibration(0)
     i = -60
-    for j in range(12):
+    for j in range(13):
         move_forward(i,100)
         i += 10
-        delay(1000)
+        # delay(1000)
         # print("angle: ", -60+i)
