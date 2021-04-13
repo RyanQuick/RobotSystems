@@ -14,7 +14,7 @@ from picarmini import set_dir_servo_angle
 from picarmini import stop
 
 
-dir_servo_angle_calibration(0)
+dir_servo_angle_calibration(-60)
 def forever():
   forward(50)
   delay(1000)
