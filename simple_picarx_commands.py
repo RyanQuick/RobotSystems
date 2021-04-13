@@ -44,7 +44,7 @@ def move_forward(direction,speed):
     
     
 if __name__ == "__main__":
-    picarx_improved.dir_servo_angle_calibration(0)
+    picarx_improved.dir_servo_angle_calibration(60)
     i = 0
     for j in range(12):
         #move_forward(0,100)
