@@ -43,13 +43,19 @@ def move_forward(direction,speed):
     # picarx_improved.forward(speed)
     print('direction: ', direction, 'speed: ', speed)
     
-    
+def test():
+    picarx_improved.dir_servo_angle_calibration(-10) 
+    picarx_improved.set_dir_servo_angle(-40)
+    picarx_improved.time.sleep(1)
+    picarx_improved.set_dir_servo_angle(0)
+    time.sleep(1)
+    picarx_improved.set_motor_speed(1, 1)
+    picarx_improved.set_motor_speed(2, 1)
+    #camera_servo_pin1.angle(0)
+    #camera_servo_pin1.angle(0)
     
 if __name__ == "__main__":
     picarx_improved.dir_servo_angle_calibration(0)
-    i = -60
-    for j in range(13):
-        move_forward(i,100)
-        i += 10
-        # delay(1000)
-        # print("angle: ", -60+i)
+    while True:
+        #move_forward(i,100)
+        test()
