@@ -62,42 +62,42 @@ for pin in motor_speed_pins:
     pin.period(PERIOD)
     pin.prescaler(PRESCALER)
 
-# def set_motor_speed(motor, speed):
-#     global cali_speed_value,cali_dir_value
-#     motor -= 1
-#     if speed >= 0:
-#         direction = 1 * cali_dir_value[motor]
-#     elif speed < 0:
-#         direction = -1 * cali_dir_value[motor]
-#     speed = abs(speed)
-#     #if speed != 0:
-#         #speed = int(speed /2 ) + 50
-#     speed = speed - cali_speed_value[motor]
-#     if direction < 0:
-#         motor_direction_pins[motor].high()
-#         motor_speed_pins[motor].pulse_width_percent(speed)
-#     else:
-#         motor_direction_pins[motor].low()
-#         motor_speed_pins[motor].pulse_width_percent(speed)
+def set_motor_speed(motor, speed):
+    global cali_speed_value,cali_dir_value
+    motor -= 1
+    if speed >= 0:
+        direction = 1 * cali_dir_value[motor]
+    elif speed < 0:
+        direction = -1 * cali_dir_value[motor]
+    speed = abs(speed)
+    #if speed != 0:
+        #speed = int(speed /2 ) + 50
+    speed = speed - cali_speed_value[motor]
+    if direction < 0:
+        motor_direction_pins[motor].high()
+        motor_speed_pins[motor].pulse_width_percent(speed)
+    else:
+        motor_direction_pins[motor].low()
+        motor_speed_pins[motor].pulse_width_percent(speed)
         
         
-# def motor_speed_calibration(value):
-#     global cali_speed_value,cali_dir_value
-#     cali_speed_value = value
-#     if value < 0:
-#         cali_speed_value[0] = 0
-#         cali_speed_value[1] = abs(cali_speed_value)
-#     else:
-#         cali_speed_value[0] = abs(cali_speed_value)
-#         cali_speed_value[1] = 0
+def motor_speed_calibration(value):
+    global cali_speed_value,cali_dir_value
+    cali_speed_value = value
+    if value < 0:
+        cali_speed_value[0] = 0
+        cali_speed_value[1] = abs(cali_speed_value)
+    else:
+        cali_speed_value[0] = abs(cali_speed_value)
+        cali_speed_value[1] = 0
 
-# def motor_direction_calibration(motor, value):
-#     # 0: positive direction
-#     # 1:negative direction
-#     global cali_dir_value
-#     motor -= 1
-#     if value == 1:
-#         cali_dir_value[motor] = -1*cali_dir_value[motor]
+def motor_direction_calibration(motor, value):
+    # 0: positive direction
+    # 1:negative direction
+    global cali_dir_value
+    motor -= 1
+    if value == 1:
+        cali_dir_value[motor] = -1*cali_dir_value[motor]
 
 
 def dir_servo_angle_calibration(value):
@@ -110,53 +110,53 @@ def set_dir_servo_angle(value):
     global dir_cal_value
     dir_servo_pin.angle(value+dir_cal_value)
 
-# def camera_servo1_angle_calibration(value):
-#     global cam_cal_value_1
-#     cam_cal_value_1 = value
-#     set_camera_servo1_angle(cam_cal_value_1)
-#     # camera_servo_pin1.angle(cam_cal_value)
+def camera_servo1_angle_calibration(value):
+    global cam_cal_value_1
+    cam_cal_value_1 = value
+    set_camera_servo1_angle(cam_cal_value_1)
+    # camera_servo_pin1.angle(cam_cal_value)
 
-# def camera_servo2_angle_calibration(value):
-#     global cam_cal_value_2
-#     cam_cal_value_2 = value
-#     set_camera_servo2_angle(cam_cal_value_2)
-#     # camera_servo_pin2.angle(cam_cal_value)
+def camera_servo2_angle_calibration(value):
+    global cam_cal_value_2
+    cam_cal_value_2 = value
+    set_camera_servo2_angle(cam_cal_value_2)
+    # camera_servo_pin2.angle(cam_cal_value)
 
-# def set_camera_servo1_angle(value):
-#     global cam_cal_value_1
-#     camera_servo_pin1.angle(-1 *(value+cam_cal_value_1))
+def set_camera_servo1_angle(value):
+    global cam_cal_value_1
+    camera_servo_pin1.angle(-1 *(value+cam_cal_value_1))
 
-# def set_camera_servo2_angle(value):
-#     global cam_cal_value_2
-#     camera_servo_pin2.angle(-1 * (value+cam_cal_value_2))
+def set_camera_servo2_angle(value):
+    global cam_cal_value_2
+    camera_servo_pin2.angle(-1 * (value+cam_cal_value_2))
 
-# def get_adc_value():
-#     adc_value_list = []
-#     adc_value_list.append(S0.read())
-#     adc_value_list.append(S1.read())
-#     adc_value_list.append(S2.read())
-#     return adc_value_list
+def get_adc_value():
+    adc_value_list = []
+    adc_value_list.append(S0.read())
+    adc_value_list.append(S1.read())
+    adc_value_list.append(S2.read())
+    return adc_value_list
 
-# def set_power(speed):
-#     set_motor_speed(1, speed)
-#     set_motor_speed(2, speed) 
+def set_power(speed):
+    set_motor_speed(1, speed)
+    set_motor_speed(2, speed) 
 
-# def backward(speed):
-#     set_motor_speed(1, speed)
-#     set_motor_speed(2, speed)
+def backward(speed):
+    set_motor_speed(1, speed)
+    set_motor_speed(2, speed)
 
-# def forward(speed):
-#     theta = 0
-#     if theta != 0:
-#         turn_radius = 9.5/tan(dir_cal_value/ pi* 180)
-#         angle_vel = speed/turn_radius
-#         motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
-#     else:
-#         motor_speed = [speed,speed]
+def forward(speed):
+    theta = 0
+    if theta != 0:
+        turn_radius = 9.5/tan(dir_cal_value/ pi* 180)
+        angle_vel = speed/turn_radius
+        motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
+    else:
+        motor_speed = [speed,speed]
     
     
-    # set_motor_speed(1, -1*motor_speed[0])
-    # set_motor_speed(2, -1*motor_speed[1])
+    set_motor_speed(1, -1*motor_speed[0])
+    set_motor_speed(2, -1*motor_speed[1])
 
 def stop():
     set_motor_speed(1, 0)
@@ -164,31 +164,31 @@ def stop():
 
 
 
-# def Get_distance():
-#     timeout=0.01
-#     trig = Pin('D8')
-#     echo = Pin('D9')
+def Get_distance():
+    timeout=0.01
+    trig = Pin('D8')
+    echo = Pin('D9')
 
-#     trig.low()
-#     time.sleep(0.01)
-#     trig.high()
-#     time.sleep(0.000015)
-#     trig.low()
-#     pulse_end = 0
-#     pulse_start = 0
-#     timeout_start = time.time()
-#     while echo.value()==0:
-#         pulse_start = time.time()
-#         if pulse_start - timeout_start > timeout:
-#             return -1
-#     while echo.value()==1:
-#         pulse_end = time.time()
-#         if pulse_end - timeout_start > timeout:
-#             return -2
-#     during = pulse_end - pulse_start
-#     cm = round(during * 340 / 2 * 100, 2)
-#     #print(cm)
-#     return cm
+    trig.low()
+    time.sleep(0.01)
+    trig.high()
+    time.sleep(0.000015)
+    trig.low()
+    pulse_end = 0
+    pulse_start = 0
+    timeout_start = time.time()
+    while echo.value()==0:
+        pulse_start = time.time()
+        if pulse_start - timeout_start > timeout:
+            return -1
+    while echo.value()==1:
+        pulse_end = time.time()
+        if pulse_end - timeout_start > timeout:
+            return -2
+    during = pulse_end - pulse_start
+    cm = round(during * 340 / 2 * 100, 2)
+    #print(cm)
+    return cm
      
 # def test():
     # dir_servo_angle_calibration(-10) 
