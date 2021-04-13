@@ -52,7 +52,7 @@ def test():
     picarx_improved.set_motor_speed(1, 1)
     picarx_improved.set_motor_speed(2, 1)
     #camera_servo_pin1.angle(0)
-    #camera_servo_pin1.angle(0)
+    #camera_servo_pin2.angle(0)
     
 if __name__ == "__main__":
     picarx_improved.dir_servo_angle_calibration(0)

@@ -199,8 +199,10 @@ def test():
     set_motor_speed(1, 1)
     set_motor_speed(2, 1)
     camera_servo_pin1.angle(0)
-    camera_servo_pin1.angle(0)
-
+    camera_servo_pin2.angle(0)
+    time.sleep(1)
+    camera_servo_pin1.angle(-40)
+    camera_servo_pin2.angle(-40)
 
 def manual_motor_shutdown():
     stop()
