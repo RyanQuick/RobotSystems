@@ -47,4 +47,4 @@ if __name__ == "__main__":
     picarx_improved.dir_servo_angle_calibration(0)
     while True:
         #move_forward(0,100)
-        picarx_improved.set_dir_servo_angle(0)
+        picarx_improved.set_dir_servo_angle(10)
