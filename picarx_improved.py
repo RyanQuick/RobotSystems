@@ -229,12 +229,12 @@ atexit.register(stop)
 
 
 
-# if __name__ == "__main__":
-#     try:
-#         # dir_servo_angle_calibration(-10) 
-#         while 1:
-#             test()
-#     finally: 
-#         stop()
+if __name__ == "__main__":
+    try:
+        # dir_servo_angle_calibration(-10) 
+        while 1:
+            test()
+    finally: 
+        stop()
 
 
