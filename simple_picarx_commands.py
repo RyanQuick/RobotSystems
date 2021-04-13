@@ -38,8 +38,12 @@ def test():
     picarx_improved.camera_servo_pin2.angle(40)
     time.sleep(1)
 
-    
+
+
+import atexit
+atexit.register(picarx_improved.stop)
+
 if __name__ == "__main__":
-    while True:
-        #test()
-        move_forward(-40,50)
+    # while True:
+    # test()
+    move_forward(-40,50)
