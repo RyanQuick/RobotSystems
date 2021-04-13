@@ -26,6 +26,6 @@ def move_forward(direction,speed):
     
 if __name__ == "__main__":
     picarx_improved.dir_servo_angle_calibration(60)
-    for i in range(1000):
+    while True:
         move_forward(0,100)
         
