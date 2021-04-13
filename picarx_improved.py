@@ -10,9 +10,7 @@ try :
     __reset_mcu__()
     time.sleep(0.01)
 except ImportError :
-    print (" This computer does not appear to be a PiCar -\
-           X system(/ opt / ezblock is not present ) \
-           . Shadowing hardware calls with substitute functions ")
+    print ("Simulator")
     from sim_ezblock import *
 
 import logging
@@ -49,8 +47,8 @@ S2 = ADC('A2')
 
 Servo_dir_flag = 1
 dir_cal_value = -10
-cam_cal_value_1 = -10
-cam_cal_value_2 = -10
+cam_cal_value_1 = 5
+cam_cal_value_2 = 10
 motor_direction_pins = [left_rear_dir_pin, right_rear_dir_pin]
 motor_speed_pins = [left_rear_pwm_pin, right_rear_pwm_pin]
 cali_dir_value = [1, -1]
@@ -141,12 +139,16 @@ def set_power(speed):
     set_motor_speed(1, speed)
     set_motor_speed(2, speed) 
 
-def backward(speed):
-    if dir_cal_value != 0:
-        turn_radius = 9.5/tan(dir_cal_value/ pi* 180)
-        print('turn_radius: ',turn_radius)
+def backward(speed,theta):
+    if theta != 0:
+        # print('turning angle:',theta)
+        turn_radius = 9.5/tan((theta* pi/ 180))
+        # print('turn_radius: ',turn_radius)
         angle_vel = speed/turn_radius
+        # print('angle_vel:',angle_vel)
         motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
+        motor_speed = [motor_speed[0]/max(motor_speed)*speed, motor_speed[1]/max(motor_speed)*speed]
+
     else:
         motor_speed = [speed,speed]
     
@@ -155,11 +157,13 @@ def backward(speed):
     set_motor_speed(2, motor_speed[1])
     print("left speed", motor_speed[0],"right speed", motor_speed[1],)
 
-def forward(speed):
-    if dir_cal_value != 0:
-        turn_radius = 9.5/tan(dir_cal_value/ pi* 180)
+def forward(speed,theta):
+    if theta != 0:
+        
+        turn_radius = 9.5/tan(theta* pi/ 180)
         angle_vel = speed/turn_radius
         motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
+        motor_speed = [motor_speed[0]/max(motor_speed)*speed, motor_speed[1]/max(motor_speed)*speed]
     else:
         motor_speed = [speed,speed]
     
@@ -225,12 +229,12 @@ atexit.register(stop)
 
 
 
-if __name__ == "__main__":
-    try:
-        # dir_servo_angle_calibration(-10) 
-        while 1:
-            test()
-    finally: 
-        stop()
+# if __name__ == "__main__":
+#     try:
+#         # dir_servo_angle_calibration(-10) 
+#         while 1:
+#             test()
+#     finally: 
+#         stop()
 
 
