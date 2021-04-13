@@ -36,19 +36,19 @@ except ImportError :
 # dir_servo_angle_calibration(0)
 
 def move_forward(direction,speed):
-    # picarx_improved.set_dir_servo_angle(direction)
+    picarx_improved.set_dir_servo_angle(-60+direction)
     # picarx_improved.forward(speed)
-    # print("direction: ",direction,"speed: ", speed)
+    print("direction: ",direction,"speed: ", speed)
+    
     pass
     
     
     
 if __name__ == "__main__":
-    picarx_improved.dir_servo_angle_calibration(60)
+    picarx_improved.dir_servo_angle_calibration(0)
     i = 0
     for j in range(12):
-        #move_forward(0,100)
-        picarx_improved.set_dir_servo_angle(-60+i)
+        move_forward(i,100)
         i += 10
         delay(1000)
         print("angle: ", -60+i)
