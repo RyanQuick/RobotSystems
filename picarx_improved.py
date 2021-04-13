@@ -48,9 +48,9 @@ S1 = ADC('A1')
 S2 = ADC('A2')
 
 Servo_dir_flag = 1
-dir_cal_value = 30
-cam_cal_value_1 = 0
-cam_cal_value_2 = 0
+dir_cal_value = -10
+cam_cal_value_1 = -10
+cam_cal_value_2 = -10
 motor_direction_pins = [left_rear_dir_pin, right_rear_dir_pin]
 motor_speed_pins = [left_rear_pwm_pin, right_rear_pwm_pin]
 cali_dir_value = [1, -1]
@@ -191,6 +191,8 @@ def Get_distance():
     return cm
      
 def test():
+    camera_servo1_angle_calibration(10)
+    camera_servo2_angle_calibration(10)
     dir_servo_angle_calibration(-10) 
     set_dir_servo_angle(-40)
     time.sleep(1)
