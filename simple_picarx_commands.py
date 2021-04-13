@@ -45,6 +45,10 @@ def move_forward(direction,speed):
     
 if __name__ == "__main__":
     picarx_improved.dir_servo_angle_calibration(0)
-    while True:
+    i = 0
+    for j in range(12):
         #move_forward(0,100)
-        picarx_improved.set_dir_servo_angle(10)
+        picarx_improved.set_dir_servo_angle(-60+i)
+        i += 10
+        delay(1000)
+        print("angle: ", -60+i)
