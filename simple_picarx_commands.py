@@ -27,11 +27,11 @@ def move_forward(speed,length,angle):
 def pl_park(speed,length, direction=-1):
     picarx_improved.set_dir_servo_angle(0)
     time.sleep(.1)
-    picarx_improved.set_dir_servo_angle(direction*50)
+    picarx_improved.set_dir_servo_angle(direction*40)
     picarx_improved.backward(speed,direction*50)
     time.sleep(length*.55)
-    picarx_improved.set_dir_servo_angle(-direction*50)
-    picarx_improved.backward(speed,-direction*50)
+    picarx_improved.set_dir_servo_angle(-direction*40)
+    picarx_improved.backward(speed,-direction*40)
     time.sleep(length*.45)
         
         
