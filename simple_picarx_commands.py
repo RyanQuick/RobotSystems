@@ -22,6 +22,7 @@ def move_forward(speed,length,angle):
     picarx_improved.forward(speed,angle)
     time.sleep(length)
     picarx_improved.stop()
+    print('finished moving forward')
     
 def pl_park(speed,length, direction=-1):
     picarx_improved.set_dir_servo_angle(0)
