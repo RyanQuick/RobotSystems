@@ -69,6 +69,16 @@ def test():
 if __name__ == "__main__":
     # while True:
     # test()
-    move_forward(50,2,0)# -40)
-    #pl_park(75, 1.75,-1)
-    k_turn(75,1.75,-1)
+    choice = input('Choose an action to take: (park, forward, kturn)')
+    if choice == 'forward':
+        print('moving forward...')
+        move_forward(50,2,0)
+    elif choice == 'park':
+        print('parking...')
+        pl_park(75, 1.75,-1)
+    elif choice == 'kturn':
+        print('turning around...')
+        k_turn(75,2.25,-1)
+    else:
+        print('did nothing...')
+        pass
