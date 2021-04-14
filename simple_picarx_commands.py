@@ -56,5 +56,5 @@ def test():
 if __name__ == "__main__":
     # while True:
     # test()
-    move_forward(50,1,-40)
+    move_forward(50,5,0)# -40)
     pl_park(50, 1.5,-1)
