@@ -155,7 +155,7 @@ def backward(speed,theta):
     
     set_motor_speed(1, motor_speed[0])
     set_motor_speed(2, motor_speed[1])
-    print("left speed", motor_speed[0],"right speed", motor_speed[1],)
+    # print("left speed", motor_speed[0],"right speed", motor_speed[1],)
 
 def forward(speed,theta):
     if theta != 0:
@@ -170,7 +170,7 @@ def forward(speed,theta):
     
     set_motor_speed(1, -1*motor_speed[0])
     set_motor_speed(2, -1*motor_speed[1])
-    print("left speed", -1*motor_speed[0],"right speed", -1*motor_speed[1],)
+    # print("left speed", (-1*motor_speed[0]),"right speed", (-1*motor_speed[1]),)
 
 def stop():
     set_motor_speed(1, 0)
