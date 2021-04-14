@@ -57,4 +57,4 @@ if __name__ == "__main__":
     # while True:
     # test()
     move_forward(50,1,-40)
-    pl_park(100, 1.5,-1)
+    pl_park(50, 1.5,-1)
