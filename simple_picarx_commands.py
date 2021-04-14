@@ -39,13 +39,13 @@ def k_turn(speed,length, direction=-1):
     # picarx_improved.set_dir_servo_angle(0)
     # time.sleep(.1)
     picarx_improved.set_dir_servo_angle(direction*40)
-    picarx_improved.forward(speed,direction*40)
+    picarx_improved.forward(speed,-direction*40)
     time.sleep(length*.50)
     picarx_improved.set_dir_servo_angle(-direction*40)
-    picarx_improved.backward(speed,-direction*40)
+    picarx_improved.backward(speed,direction*40)
     time.sleep(length*.50)
     picarx_improved.set_dir_servo_angle(direction*40)
-    picarx_improved.forward(speed,direction*40)
+    picarx_improved.forward(speed,-direction*40)
     time.sleep(length*.50)   
         
     
@@ -70,5 +70,5 @@ if __name__ == "__main__":
     # while True:
     # test()
     move_forward(50,2,0)# -40)
-    pl_park(75, 1.75,-1)
+    #pl_park(75, 1.75,-1)
     k_turn(75,1.75,-1)
