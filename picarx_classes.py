@@ -57,6 +57,8 @@ class PicarController:
         self.motor_speed_pins = [self.left_rear_pwm_pin, self.right_rear_pwm_pin]
         self.cali_dir_value = [1, -1]
         self.cali_speed_value = [0, 0]
+        
+        self.steering_dir_val = 0
 
         for pin in self.motor_speed_pins:
             pin.period(self.PERIOD)
@@ -111,6 +113,7 @@ class PicarController:
     
     def set_dir_servo_angle(self, value):
         #global dir_cal_value
+        self.steering_dir_val = value
         self.dir_servo_pin.angle(value+self.dir_cal_value)
     
     def camera_servo1_angle_calibration(self, value):
@@ -144,10 +147,10 @@ class PicarController:
         self.set_motor_speed(1, speed)
         self.set_motor_speed(2, speed) 
     
-    def backward(self, speed, theta):
-        if theta != 0:
+    def backward(self, speed):
+        if self.steering_dir_val != 0:
             # print('turning angle:',theta)
-            turn_radius = 9.5/tan((theta* pi/ 180))
+            turn_radius = 9.5/tan((self.steering_dir_val* pi/ 180))
             # print('turn_radius: ',turn_radius)
             angle_vel = speed/turn_radius
             # print('angle_vel:',angle_vel)
@@ -162,10 +165,10 @@ class PicarController:
         self.set_motor_speed(2, motor_speed[1])
         # print("left speed", motor_speed[0],"right speed", motor_speed[1],)
     
-    def forward(self, speed, theta):
-        if theta != 0:
+    def forward(self, speed):
+        if self.steering_dir_val != 0:
             
-            turn_radius = 9.5/tan(theta* pi/ 180)
+            turn_radius = 9.5/tan(self.steering_dir_val* pi/ 180)
             angle_vel = speed/turn_radius
             motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
             motor_speed = [motor_speed[0]/max(motor_speed)*speed, motor_speed[1]/max(motor_speed)*speed]

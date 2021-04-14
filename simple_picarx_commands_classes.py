@@ -19,29 +19,29 @@ import time
 
 def move_forward(speed,length,angle):
     picarx_improved.set_dir_servo_angle(controller,angle)
-    picarx_improved.forward(controller,speed,angle)
+    picarx_improved.forward(controller,speed)
     time.sleep(length)
     picarx_improved.stop(controller)
     print('finished moving forward')
     
-def pl_park(speed,length, direction=-1):
+def pl_park(speed, length, direction=-1):
     picarx_improved.set_dir_servo_angle(controller,direction*40)
-    picarx_improved.backward(controller,speed,direction*40)
+    picarx_improved.backward(controller,speed)
     time.sleep(length*.50)
     picarx_improved.set_dir_servo_angle(controller,-direction*40)
-    picarx_improved.backward(controller,speed,-direction*40)
+    picarx_improved.backward(controller,speed)
     time.sleep(length*.50)
     
     
-def k_turn(speed,length, direction=-1):
+def k_turn(speed, length, direction=-1):
     picarx_improved.set_dir_servo_angle(controller,direction*40)
-    picarx_improved.forward(controller,speed,-direction*40)
+    picarx_improved.forward(controller,speed)
     time.sleep(length*.50)
     picarx_improved.set_dir_servo_angle(controller,-direction*40)
-    picarx_improved.backward(controller,speed,direction*40)
+    picarx_improved.backward(controller,speed)
     time.sleep(length*.50)
     picarx_improved.set_dir_servo_angle(controller,direction*40)
-    picarx_improved.forward(controller,speed,-direction*40)
+    picarx_improved.forward(controller,speed)
     time.sleep(length*.50)   
         
     
