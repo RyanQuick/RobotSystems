@@ -146,7 +146,7 @@ def backward(speed,theta):
         # print('turn_radius: ',turn_radius)
         angle_vel = speed/turn_radius
         # print('angle_vel:',angle_vel)
-        motor_speed = [angle_vel*(turn_radius+5.85), angle_vel*(turn_radius-5.85)]
+        motor_speed = [angle_vel*(turn_radius-5.85), angle_vel*(turn_radius+5.85)]
         motor_speed = [motor_speed[0]/max(motor_speed)*speed, motor_speed[1]/max(motor_speed)*speed]
 
     else:
