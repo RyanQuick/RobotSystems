@@ -46,7 +46,7 @@ S1 = ADC('A1')
 S2 = ADC('A2')
 
 Servo_dir_flag = 1
-dir_cal_value = -12
+dir_cal_value = -15
 cam_cal_value_1 = 5
 cam_cal_value_2 = 10
 motor_direction_pins = [left_rear_dir_pin, right_rear_dir_pin]
