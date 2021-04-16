@@ -253,16 +253,19 @@ class Interpreters:
     def getGrayscaleValue(self, adcs):
         if (adcs[0]) <= self.sensitivity and (adcs[2]) > self.sensitivity:
             if (adcs[1]) <= self.sensitivity:
+                logging.info('condition 1')
                 rob_pos = .33 * self.polarity
             else:
                 rob_pos = .66* self.polarity
                 
         if (adcs[2]) <= self.sensitivity and (adcs[0]) > self.sensitivity:
+            logging.info('condition 2')
             if (adcs[1]) <= self.sensitivity:
                 rob_pos = -.33 * self.polarity
             else:
                 rob_pos = -.66* self.polarity
         else:
+            logging.info('condition 3')
             rob_pos = 0
                 
                 
