@@ -268,17 +268,27 @@ class Interpreters:
                 
         return rob_pos, adcs
           
-      
+
+class Controllers:
+    def __init__(self):
+        self.line_steering = 30
+        
+    def line_following(self, rob_pos, speed):
+        Motors().set_dir_servo_angle(rob_pos*self.line_steering)
+        Motors().forward(speed)
+        
+        
         
 if __name__ == "__main__":
     m = Motors()
     s = Sensors()
     i = Interpreters()
+    c = Controllers()
     while True:
         
         [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
         logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
-    
+        c.line_following(position, 0)
     # try:
     #     # self.dir_servo_angle_calibration(-10) 
     #     while 1:-
