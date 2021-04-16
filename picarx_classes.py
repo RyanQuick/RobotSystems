@@ -247,7 +247,7 @@ class Sensors:
     
 class Interpreters:
     def __init__(self):
-        self.sensitivity = 0
+        self.sensitivity = 700
         self.polarity = 1
         
     def getGrayscaleValue(self, adcs):
