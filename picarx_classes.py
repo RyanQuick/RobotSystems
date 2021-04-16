@@ -247,25 +247,22 @@ class Sensors:
     
 class Interpreters:
     def __init__(self):
-        self.sensitivity = 700
-        self.polarity = 1
+        self.sensitivity = 200
+        self.polarity = 1 # Means black line
         
     def getGrayscaleValue(self, adcs):
-        if (adcs[0]) <= self.sensitivity and (adcs[2]) > self.sensitivity:
-            if (adcs[1]) <= self.sensitivity:
-                logging.info('condition 1')
-                rob_pos = .33 * self.polarity
+        if abs(adcs[0] - adcs[2]) > self.sensitivity:
+            if adcs[0] < adcs[2]:
+                if abs(adcs[1]-adcs[0]) <= self.sensitivity/4:
+                    rob_pos = .66 * self.polarity   
+                else:
+                    rob_pos = .33* self.polarity
             else:
-                rob_pos = .66* self.polarity
-                
-        if (adcs[2]) <= self.sensitivity and (adcs[0]) > self.sensitivity:
-            logging.info('condition 2')
-            if (adcs[1]) <= self.sensitivity:
-                rob_pos = -.33 * self.polarity
-            else:
-                rob_pos = -.66* self.polarity
+                if abs(adcs[1]-adcs[2]) <= self.sensitivity/4:
+                    rob_pos = -.66 * self.polarity   
+                else:
+                    rob_pos = -.33* self.polarity
         else:
-            logging.info('condition 3')
             rob_pos = 0
                 
                 
@@ -281,11 +278,10 @@ if __name__ == "__main__":
         
         [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
         logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
-        # logging.debug("adc values: ".join(map(str,adcs)))
     
     # try:
     #     # self.dir_servo_angle_calibration(-10) 
-    #     while 1:
+    #     while 1:-
     #         m.test()
     # finally: 
     #     m.stop()
