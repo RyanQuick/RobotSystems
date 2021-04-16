@@ -29,7 +29,7 @@ from logdecorator import log_on_start , log_on_end , log_on_error
 # @log_on_end ( logging . DEBUG , " Message when function ends successfully ")
 
 
-class PicarController:
+class Motors:
     
     
     def __init__(self):
@@ -45,9 +45,7 @@ class PicarController:
         self.left_rear_dir_pin = Pin("D4")
         self.right_rear_dir_pin = Pin("D5")
         
-        self.S0 = ADC('A0')
-        self.S1 = ADC('A1')
-        self.S2 = ADC('A2')
+
         
         self.Servo_dir_flag = 1
         self.dir_cal_value = -18
@@ -136,12 +134,7 @@ class PicarController:
         # global cam_cal_value_2
         self.camera_servo_pin2.angle(-1 * (value+self.cam_cal_value_2))
     
-    # def get_adc_value():
-    #     adc_value_list = []
-    #     adc_value_list.append(S0.read())
-    #     adc_value_list.append(S1.read())
-    #     adc_value_list.append(S2.read())
-    #     return adc_value_list
+
     
     def set_power(self, speed):
         self.set_motor_speed(1, speed)
@@ -186,31 +179,7 @@ class PicarController:
     
     
     
-    # def Get_distance():
-    #     timeout=0.01
-    #     trig = Pin('D8')
-    #     echo = Pin('D9')
-    
-    #     trig.low()
-    #     time.sleep(0.01)
-    #     trig.high()
-    #     time.sleep(0.000015)
-    #     trig.low()
-    #     pulse_end = 0
-    #     pulse_start = 0
-    #     timeout_start = time.time()
-    #     while echo.value()==0:
-    #         pulse_start = time.time()
-    #         if pulse_start - timeout_start > timeout:
-    #             return -1
-    #     while echo.value()==1:
-    #         pulse_end = time.time()
-    #         if pulse_end - timeout_start > timeout:
-    #             return -2
-    #     during = pulse_end - pulse_start
-    #     cm = round(during * 340 / 2 * 100, 2)
-    #     #print(cm)
-    #     return cm
+
          
     def test(self):
         self.camera_servo1_angle_calibration(5)
@@ -236,15 +205,84 @@ class PicarController:
 
 
 
+class Sensors:
+    def __init__(self):
+        self.S0 = ADC('A0')
+        self.S1 = ADC('A1')
+        self.S2 = ADC('A2')
 
-if __name__ == "__main__":
-    pc = PicarController()
+    # def Get_distance(self):
+    #     timeout=0.01
+    #     trig = Pin('D8')
+    #     echo = Pin('D9')
     
-    try:
-        # self.dir_servo_angle_calibration(-10) 
-        while 1:
-            pc.test()
-    finally: 
-        pc.stop()
+    #     trig.low()
+    #     time.sleep(0.01)
+    #     trig.high()
+    #     time.sleep(0.000015)
+    #     trig.low()
+    #     pulse_end = 0
+    #     pulse_start = 0
+    #     timeout_start = time.time()
+    #     while echo.value()==0:
+    #         pulse_start = time.time()
+    #         if pulse_start - timeout_start > timeout:
+    #             return -1
+    #     while echo.value()==1:
+    #         pulse_end = time.time()
+    #         if pulse_end - timeout_start > timeout:
+    #             return -2
+    #     during = pulse_end - pulse_start
+    #     cm = round(during * 340 / 2 * 100, 2)
+    #     #print(cm)
+    #     return cm
+    
+    def get_adc_value(self):
+        adc_value_list = []
+        adc_value_list.append(self.S0.read())
+        adc_value_list.append(self.S1.read())
+        adc_value_list.append(self.S2.read())
+        return adc_value_list
+    
+    
+class Interpreters:
+    def __init__(self):
+        self.sensitivity = 0
+        self.polarity = 1
+        
+    def getGrayscaleValue(self, adcs):
+        if (adcs[0]) <= self.sensitivity and (adcs[2]) > self.sensitivity:
+            if (adcs[1]) <= self.sensitivity:
+                rob_pos = .33 * self.polarity
+            else:
+                rob_pos = .66* self.polarity
+                
+        if (adcs[2]) <= self.sensitivity and (adcs[0]) > self.sensitivity:
+            if (adcs[1]) <= self.sensitivity:
+                rob_pos = -.33 * self.polarity
+            else:
+                rob_pos = -.66* self.polarity
+        else:
+            rob_pos = 0
+                
+                
+        return rob_pos
+          
+      
+        
+if __name__ == "__main__":
+    m = Motors()
+    s = Sensors()
+    i = Interpreters()
+    while True:
+        position = i.getGrayscaleValue(s.get_adc_value())
+        print('Robot Relative Position: ', position)
+    
+    # try:
+    #     # self.dir_servo_angle_calibration(-10) 
+    #     while 1:
+    #         m.test()
+    # finally: 
+    #     m.stop()
 
 
