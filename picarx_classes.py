@@ -20,7 +20,7 @@ logging.basicConfig(format = logging_format, level = logging.INFO, datefmt ="% H
 
 logging.getLogger().setLevel(logging.DEBUG) 
 # comment out this line to remove debugging comments
-# logging . debug ( message ) Use this line to print debugging info
+# logging.debug (message) Use this line to print debugging info
 
 from logdecorator import log_on_start , log_on_end , log_on_error 
 # Add these lines to the start of functions
@@ -276,8 +276,8 @@ if __name__ == "__main__":
     i = Interpreters()
     while True:
         [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
-        print('Relative Position: ', position)
-        print('adc values: ', adcs)
+        logging.debug('Relative Position: ', position)
+        logging.debug('adc values: ', adcs)
     
     # try:
     #     # self.dir_servo_angle_calibration(-10) 
