@@ -266,7 +266,7 @@ class Interpreters:
             rob_pos = 0
                 
                 
-        return rob_pos
+        return rob_pos, adcs
           
       
         
@@ -275,8 +275,9 @@ if __name__ == "__main__":
     s = Sensors()
     i = Interpreters()
     while True:
-        position = i.getGrayscaleValue(s.get_adc_value())
-        print('Robot Relative Position: ', position)
+        [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
+        print('Relative Position: ', position)
+        print('adc values: ', adcs)
     
     # try:
     #     # self.dir_servo_angle_calibration(-10) 

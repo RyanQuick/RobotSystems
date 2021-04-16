@@ -14,7 +14,7 @@ except ImportError:
     print ("Simulator")
     from sim_ezblock import *
 
-from picarx_classes import PicarController as picarx_improved
+from picarx_classes import Motors as picarx_improved
 import time
 
 def move_forward(speed,length,angle):
