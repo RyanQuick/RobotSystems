@@ -16,9 +16,9 @@ except ImportError :
 
 import logging
 logging_format = "%(asctime) s : %(message) s " 
-logging.basicConfig(format = logging_format, level = logging.INFO, datefmt ="% H :% M :% S ")
+logging.basicConfig(level = logging.INFO) #format = logging_format, level = logging.INFO, )#datefmt ="% H :% M :% S ")
 
-logging.getLogger().setLevel(logging.DEBUG) 
+# logging.getLogger().setLevel(logging.DEBUG) 
 # comment out this line to remove debugging comments
 # logging.debug (message) Use this line to print debugging info
 
@@ -275,9 +275,10 @@ if __name__ == "__main__":
     s = Sensors()
     i = Interpreters()
     while True:
+        
         [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
-        logging.debug('Relative Position: ', position)
-        logging.debug('adc values: ', adcs)
+        logging.info("Relative Position: {0}, adcs: {1}".format(position,adcs))
+        # logging.debug("adc values: ".join(map(str,adcs)))
     
     # try:
     #     # self.dir_servo_angle_calibration(-10) 
@@ -285,5 +286,19 @@ if __name__ == "__main__":
     #         m.test()
     # finally: 
     #     m.stop()
+    
+    
+    
+    
+    
+# import logging
+# logging.basicConfig(level=logging.INFO)
+
+# def hypotenuse(a, b):
+#     """Compute the hypotenuse"""
+#     return (a**2 + b**2)**0.5
+# opp = 3
+# adj = 4
+# logging.info("Hypotenuse of {a}, {b} is {c}".format(a=opp, b=adj, c=hypotenuse(opp,adj)))
 
 
