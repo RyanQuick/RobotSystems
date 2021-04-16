@@ -280,7 +280,7 @@ if __name__ == "__main__":
     while True:
         
         [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
-        logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adc[1],adc[2]))
+        logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
         # logging.debug("adc values: ".join(map(str,adcs)))
     
     # try:
