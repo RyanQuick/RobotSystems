@@ -289,7 +289,7 @@ if __name__ == "__main__":
         [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
         logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
         c.line_following(position, 0)
-        time.delay(.1)
+        time.sleep(.1)
     # try:
     #     # self.dir_servo_angle_calibration(-10) 
     #     while 1:-
