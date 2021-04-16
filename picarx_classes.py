@@ -258,7 +258,7 @@ class Interpreters:
                 else:
                     rob_pos = 1* self.polarity
             else:
-                if adcs[2]+((adcs[2]-adcs[0])/4) < adcs[1]:
+                if adcs[2]+(abs(adcs[2]-adcs[0])/4) < adcs[1]:
                     rob_pos = -1 * self.polarity   
                 else:
                     rob_pos = -.5* self.polarity
