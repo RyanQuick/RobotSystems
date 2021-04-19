@@ -11,7 +11,7 @@ Vilib.camera_start(True)
 Vilib.human_detect_switch(True)
 camera_servo1_angle_calibration(0)
 camera_servo2_angle_calibration(0)
-WiFi().write('CN', 'MakerStarsHall', 'sunfounder')
+# WiFi().write('CN', 'MakerStarsHall', 'sunfounder')
 
 
 def forever():

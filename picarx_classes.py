@@ -2,6 +2,7 @@
 
 import time
 from math import tan, pi
+import numpy as np
 
 try :
     from ezblock import __reset_mcu__
@@ -235,7 +236,35 @@ class Sensors:
         adc_value_list.append(self.S2.read())
         return adc_value_list
     
-    
+    def look_for_color(self):
+        upper_black = np.array([20,20,20])
+        lower_black = np.array([0,0,0])
+        frame = cv2.imread('/home/pi/DeepPiCar/driver/data/road1_240x320.png')
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(hsv,lower_black,upper_black)
+        edges = cv2.Canny(mask, 200, 400)
+        
+        # removing top of image
+        height, width = edges.shape
+        mask = np.zeros_like(edges)
+        polygon = np.array([[
+            (0, height * 1 / 2),
+            (width, height * 1 / 2),
+            (width, height),
+            (0, height),
+            ]], np.int32)
+        cv2.fillPoly(mask, polygon, 255)
+        cropped_edges = cv2.bitwise_and(edges, mask)
+        
+        # looking for line segments
+        rho = 1  # distance precision in pixel, i.e. 1 pixel
+        angle = np.pi / 180  # angular precision in radian, i.e. 1 degree
+        min_threshold = 10  # minimal of votes
+        line_segments = cv2.HoughLinesP(cropped_edges, rho, angle, min_threshold, 
+            np.array([]), minLineLength=8, maxLineGap=4)
+        
+        
+        
 class Interpreters:
     def __init__(self):
         self.sensitivity = 200
@@ -266,21 +295,22 @@ class Controllers:
         
     def line_following(self, rob_pos, speed):
         logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
-        m.set_dir_servo_angle(rob_pos*self.line_steering)
-        m.forward(speed)
+        Motors().set_dir_servo_angle(rob_pos*self.line_steering)
+        Motors().forward(speed)
         return rob_pos*self.line_steering
-        
+
         
 if __name__ == "__main__":
-    m = Motors()
-    s = Sensors()
-    i = Interpreters()
-    c = Controllers()
-    while True:
+    pass 
+    # m = Motors()
+    # s = Sensors()
+    # i = Interpreters()
+    # c = Controllers()
+    # while True:
         
-        [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
-        # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
-        c.line_following(position, 0)
+    #     [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
+    #     # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
+    #     c.line_following(position, 0)
 
     
     
