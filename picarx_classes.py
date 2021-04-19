@@ -66,15 +66,12 @@ class Motors:
         atexit.register(self.stop)
 
     def set_motor_speed(self, motor, speed):
-        # global cali_speed_value,cali_dir_value
         motor -= 1
         if speed >= 0:
             direction = 1 * self.cali_dir_value[motor]
         elif speed < 0:
             direction = -1 * self.cali_dir_value[motor]
         speed = abs(speed)
-        #if speed != 0:
-            #speed = int(speed /2 ) + 50
         speed = speed - self.cali_speed_value[motor]
         if direction < 0:
             self.motor_direction_pins[motor].high()
@@ -85,7 +82,6 @@ class Motors:
             
             
     def motor_speed_calibration(self, value):
-        # global cali_speed_value,cali_dir_value
         self.cali_speed_value = value
         if value < 0:
             self.cali_speed_value[0] = 0
@@ -97,20 +93,18 @@ class Motors:
     def motor_direction_calibration(self, motor, value):
         # 0: positive direction
         # 1:negative direction
-        # global cali_dir_value
         motor -= 1
         if value == 1:
             self.cali_dir_value[motor] = -1*self.cali_dir_value[motor]
     
     
     def dir_servo_angle_calibration(self, value):
-        # global dir_cal_value
         self.dir_cal_value = value
         self.set_dir_servo_angle(self.dir_cal_value)
         # dir_servo_pin.angle(dir_cal_value)
     
     def set_dir_servo_angle(self, value):
-        #global dir_cal_value
+        
         self.steering_dir_val = value
         self.dir_servo_pin.angle(value+self.dir_cal_value)
     
@@ -121,17 +115,14 @@ class Motors:
         # camera_servo_pin1.angle(cam_cal_value)
     
     def camera_servo2_angle_calibration(self, value):
-        # global cam_cal_value_2
         self.cam_cal_value_2 = value
         self.set_camera_servo2_angle(self.cam_cal_value_2)
         # camera_servo_pin2.angle(cam_cal_value)
     
     def set_camera_servo1_angle(self, value):
-        #global cam_cal_value_1
         self.camera_servo_pin1.angle(-1 *(value+self.cam_cal_value_1))
     
     def set_camera_servo2_angle(self, value):
-        # global cam_cal_value_2
         self.camera_servo_pin2.angle(-1 * (value+self.cam_cal_value_2))
     
 
@@ -274,9 +265,9 @@ class Controllers:
         self.line_steering = -30
         
     def line_following(self, rob_pos, speed):
-        logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
-        Motors().set_dir_servo_angle(rob_pos*self.line_steering)
-        Motors().forward(speed)
+        # logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
+        m.set_dir_servo_angle(rob_pos*self.line_steering)
+        m.forward(speed)
         
         
         
@@ -288,7 +279,7 @@ if __name__ == "__main__":
     while True:
         
         [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
-        # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
+        logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
         c.line_following(position, 0)
         # time.sleep(.1)
     # try:
