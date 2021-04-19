@@ -271,7 +271,7 @@ class Interpreters:
 
 class Controllers:
     def __init__(self):
-        self.line_steering = -30
+        self.line_steering = 30
         
     def line_following(self, rob_pos, speed):
         Motors().set_dir_servo_angle(rob_pos*self.line_steering)
