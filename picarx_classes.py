@@ -281,7 +281,7 @@ class Controllers:
         
         
 if __name__ == "__main__":
-    # m = Motors()
+    m = Motors()
     s = Sensors()
     i = Interpreters()
     c = Controllers()
