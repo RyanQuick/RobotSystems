@@ -235,7 +235,8 @@ class Sensors:
         adc_value_list.append(self.S1.read())
         adc_value_list.append(self.S2.read())
         return adc_value_list
-    
+
+class CVSteering:
     def look_for_color(self):
         upper_black = np.array([20,20,20])
         lower_black = np.array([0,0,0])
@@ -243,7 +244,9 @@ class Sensors:
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv,lower_black,upper_black)
         edges = cv2.Canny(mask, 200, 400)
-        
+        return edges
+    
+    def crop_video(self, edges):
         # removing top of image
         height, width = edges.shape
         mask = np.zeros_like(edges)
@@ -255,14 +258,65 @@ class Sensors:
             ]], np.int32)
         cv2.fillPoly(mask, polygon, 255)
         cropped_edges = cv2.bitwise_and(edges, mask)
+        return cropped_edges
         
+    def detect_line_segments(self, cropped_edges):    
+    
         # looking for line segments
         rho = 1  # distance precision in pixel, i.e. 1 pixel
         angle = np.pi / 180  # angular precision in radian, i.e. 1 degree
         min_threshold = 10  # minimal of votes
         line_segments = cv2.HoughLinesP(cropped_edges, rho, angle, min_threshold, 
             np.array([]), minLineLength=8, maxLineGap=4)
+        return line_segments
+    
+    def average_slope_intercept(self, frame, line_segments): 
+        middle_lines = []
+        lane_lines = []
+        if line_segments is None:
+            logging.info('No line_segment segments detected')
+            return lane_lines
         
+        for line_segment in line_segments:
+            for x1, y1, x2, y2 in line_segment:
+                if x1 == x2:
+                    logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
+                    continue
+                fit = np.polyfit((x1, x2), (y1, y2), 1)
+                slope = fit[0]
+                intercept = fit[1]
+                # if slope < 0:
+                #     if x1 < left_region_boundary and x2 < left_region_boundary:
+                middle_lines.append((slope, intercept))
+        lane_lines.append(make_points(frame, np.average(middle_lines,axis = 0)))
+        return lane_lines
+
+
+    def make_points(self, frame, line):
+        height, width, _ = frame.shape
+        slope, intercept = line
+        y1 = height  # bottom of the frame
+        y2 = int(y1 * 1 / 2)  # make points from middle of the frame down
+    
+        # bound the coordinates within the frame
+        x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
+        x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
+        return [[x1, y1, x2, y2]]
+    
+    def steering_angle(self, path):
+        x1, y1, x2, y2 = lane_lines[0]
+        x_offset = x2 - x1
+        y_offset = y2 - y1
+        drive_angle = math.atan(x_offset / y_offset * pi/ 180)
+        return drive_angle
+        
+    def steering_angle_adjustment(self, current_angle, new_angle, turn_limit):
+        angle_diff = new_angle - current_angle
+        if abs(angle_diff) > turn_limit:
+            adjusted_angle = current_angle + turn_limit * angle_diff / abs(angle_diff)
+        else:
+            adjusted_angle = new_angle
+            return adjusted_angle    
         
         
 class Interpreters:

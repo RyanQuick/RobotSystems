@@ -14,7 +14,7 @@ except ImportError:
     print ("Simulator")
     from sim_ezblock import *
 
-from picarx_classes import Motors, Sensors, Interpreters, Controllers
+from picarx_classes import Motors, Sensors, Interpreters, Controllers, CVSteering
 import time
 import cv2
 
@@ -65,9 +65,16 @@ def gray_follow_line(speed,length):
         Controllers().line_following(position, speed)
 
 def cv_follow_line():
-    
-
-
+    frame = 
+    edges = CVSteering.look_for_color(frame)
+    cropped_edges = CVSteering.crop_video(edges)
+    line_segments = CVSteering.detect_line_segments(cropped_edges)
+    path = CVSteering.average_slope_intercept(frame, line_segments)
+    # CVSteering.make_points(frame, line)
+    CVSteering.steering_angle(path)
+    CVSteering.steering_angle_adjustment(current_angle, new_angle, turn_limit)
+        
+        
 # import atexit
 # atexit.register(Motors.stop)
 
