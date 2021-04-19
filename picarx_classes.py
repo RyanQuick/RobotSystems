@@ -150,7 +150,7 @@ class Motors:
         # print("left speed", motor_speed[0],"right speed", motor_speed[1],)
     
     def forward(self, speed):
-        if self.steering_dir_val != 0:
+        if self.steering_dir_val != 0 and speed != 0:
             
             turn_radius = 9.5/tan(self.steering_dir_val* pi/ 180)
             angle_vel = speed/turn_radius
@@ -265,7 +265,7 @@ class Controllers:
         self.line_steering = -30
         
     def line_following(self, rob_pos, speed):
-        # logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
+        logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
         m.set_dir_servo_angle(rob_pos*self.line_steering)
         m.forward(speed)
         
@@ -279,7 +279,7 @@ if __name__ == "__main__":
     while True:
         
         [position, adcs] = i.getGrayscaleValue(s.get_adc_value())
-        logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
+        # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
         c.line_following(position, 0)
         # time.sleep(.1)
     # try:
