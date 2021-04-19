@@ -14,58 +14,58 @@ except ImportError:
     print ("Simulator")
     from sim_ezblock import *
 
-from picarx_classes import Motors as picarx_improved
+from picarx_classes import Motors
 import time
 
 def move_forward(speed,length,angle):
-    picarx_improved.set_dir_servo_angle(controller,angle)
-    picarx_improved.forward(controller,speed)
+    Motors.set_dir_servo_angle(motor_class,angle)
+    Motors.forward(motor_class,speed)
     time.sleep(length)
-    picarx_improved.stop(controller)
+    Motors.stop(m)
     print('finished moving forward')
     
 def pl_park(speed, length, direction=-1):
-    picarx_improved.set_dir_servo_angle(controller,direction*40)
-    picarx_improved.backward(controller,speed)
+    Motors.set_dir_servo_angle(motor_class,direction*40)
+    Motors.backward(motor_class,speed)
     time.sleep(length*.50)
-    picarx_improved.set_dir_servo_angle(controller,-direction*40)
-    picarx_improved.backward(controller,speed)
+    Motors.set_dir_servo_angle(motor_class,-direction*40)
+    Motors.backward(motor_class,speed)
     time.sleep(length*.50)
     
     
 def k_turn(speed, length, direction=-1):
-    picarx_improved.set_dir_servo_angle(controller,direction*40)
-    picarx_improved.forward(controller,speed)
+    Motors.set_dir_servo_angle(motor_class,direction*40)
+    Motors.forward(motor_class,speed)
     time.sleep(length*.50)
-    picarx_improved.set_dir_servo_angle(controller,-direction*40)
-    picarx_improved.backward(controller,speed)
+    Motors.set_dir_servo_angle(motor_class,-direction*40)
+    Motors.backward(motor_class,speed)
     time.sleep(length*.50)
-    picarx_improved.set_dir_servo_angle(controller,direction*40)
-    picarx_improved.forward(controller,speed)
+    Motors.set_dir_servo_angle(motor_class,direction*40)
+    Motors.forward(motor_class,speed)
     time.sleep(length*.50)   
         
     
 def test():
-    picarx_improved.set_dir_servo_angle(controller,-40)
-    picarx_improved.camera_servo_pin1.angle(controller,-40)
-    picarx_improved.camera_servo_pin2.angle(controller,-40)
+    Motors.set_dir_servo_angle(motor_class,-40)
+    Motors.camera_servo_pin1.angle(motor_class,-40)
+    Motors.camera_servo_pin2.angle(motor_class,-40)
     time.sleep(1)
-    picarx_improved.set_motor_speed(controller,1, 1)
-    picarx_improved.set_motor_speed(controller,2, 1)
-    picarx_improved.set_dir_servo_angle(controller,40)
-    picarx_improved.camera_servo_pin1.angle(controller,40)
-    picarx_improved.camera_servo_pin2.angle(controller,40)
+    Motors.set_motor_speed(motor_class,1, 1)
+    Motors.set_motor_speed(motor_class,2, 1)
+    Motors.set_dir_servo_angle(motor_class,40)
+    Motors.camera_servo_pin1.angle(motor_class,40)
+    Motors.camera_servo_pin2.angle(motor_class,40)
     time.sleep(1)
 
 
 
 # import atexit
-# atexit.register(picarx_improved.stop)
+# atexit.register(Motors.stop)
 
 if __name__ == "__main__":
     # while True:
     # test()
-    controller = picarx_improved()
+    motor_class = Motors()
     choice = input('Choose an action to take: (park, forward, kturn)')
     if choice == 'forward':
         print('moving forward...')
