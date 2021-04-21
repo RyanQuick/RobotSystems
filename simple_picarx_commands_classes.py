@@ -65,15 +65,15 @@ def gray_follow_line(speed):
 
 def cv_follow_line(speed):
     while True:
-        frame = CVSteering.start_cv(CVSteering())
-        edges = CVSteering.look_for_color(CVSteering(), frame)
-        cropped_edges = CVSteering.crop_video(CVSteering(), edges)
-        line_segments = CVSteering.detect_line_segments(CVSteering(), cropped_edges)
-        path = CVSteering.average_slope_intercept(CVSteering(), frame, line_segments)
-        # CVSteering.make_points(CVSteering, frame, line)
-        new_angle = CVSteering.steering_angle(CVSteering(), path)
-        adjusted_angle = CVSteering.steering_angle_adjustment(CVSteering(), new_angle, turn_limit = 30)
-        Controllers.line_following(Controllers(),adjusted_angle/-30, speed)
+        frame = cvs.start_cv()
+        edges = cvs.look_for_color(frame)
+        cropped_edges = cvs.crop_video(edges)
+        line_segments = cvs.detect_line_segments(cropped_edges)
+        path = cvs.average_slope_intercept(frame, line_segments)
+        # cvs.make_points(CVSteering, frame, line)
+        new_angle = cvs.steering_angle(path)
+        adjusted_angle = cvs.steering_angle_adjustment(new_angle, turn_limit = 30)
+        c.line_following(adjusted_angle/-30, speed)
         
 # import atexit
 # atexit.register(Motors.stop)
@@ -83,6 +83,7 @@ if __name__ == "__main__":
     s = Sensors()
     i = Interpreters()
     c = Controllers()
+    cvs = CVSteering()
     choice = input('Choose an action to take: (park, forward, kturn, grayfollow, camerafollow)')
     if choice == 'forward':
         print('moving forward...')
