@@ -18,11 +18,11 @@ from picarx_classes import Motors, Sensors, Interpreters, Controllers, CVSteerin
 import time
 import cv2
 
-def move_forward(speed,length,angle):
-    Motors.set_dir_servo_angle(angle)
-    Motors.forward(speed)
+def move_forward(self,speed,length,angle):
+    Motors().set_dir_servo_angle(self,angle)
+    Motors().forward(self,speed)
     time.sleep(length)
-    Motors.stop()
+    Motors().stop()
     print('finished moving forward')
     
 def pl_park(speed, length, direction=-1):
