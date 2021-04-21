@@ -301,15 +301,15 @@ class CVSteering:
         
         for line_segment in line_segments:
             for x1, y1, x2, y2 in line_segment:
-                if x1 == x2:
-                    # logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
-                    continue
-                fit = np.polyfit((x1, x2), (y1, y2), 1)
-                slope = fit[0]
-                intercept = fit[1]
-                # if slope < 0:
-                #     if x1 < left_region_boundary and x2 < left_region_boundary:
-                middle_lines.append((slope, intercept)) 
+                if x1 != x2:
+                    fit = np.polyfit((x1, x2), (y1, y2), 1)
+                    slope = fit[0]
+                    intercept = fit[1]
+                    # if slope < 0:
+                    #     if x1 < left_region_boundary and x2 < left_region_boundary:
+                    middle_lines.append((slope, intercept)) 
+                else:
+                    logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
         lane_lines.append(CVSteering.make_points(CVSteering(),frame, np.average(middle_lines,axis = 0)))
         return lane_lines
 
