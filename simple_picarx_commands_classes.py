@@ -61,7 +61,7 @@ def gray_follow_line(speed):
     while True:        
         [position, adcs] = i.get_grayscale_value(s.get_adc_value())
         # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
-        c.line_following(position, speed)
+        c.line_following(m,position, speed)
 
 def cv_follow_line(speed):
     while True:
@@ -73,7 +73,7 @@ def cv_follow_line(speed):
         # cvs.make_points(CVSteering, frame, line)
         new_angle = cvs.steering_angle(path)
         adjusted_angle = cvs.steering_angle_adjustment(new_angle, turn_limit = 30)
-        c.line_following(adjusted_angle/-30, speed)
+        c.line_following(m,adjusted_angle/-30, speed)
         
 # import atexit
 # atexit.register(Motors.stop)
