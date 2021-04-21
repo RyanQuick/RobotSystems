@@ -64,7 +64,7 @@ def gray_follow_line(speed,length):
         # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
         Controllers.line_following(position, speed)
 
-def cv_follow_line():
+def cv_follow_line(speed):
     while True:
         frame = CVSteering.start_cv(CVSteering())
         edges = CVSteering.look_for_color(CVSteering(), frame)
@@ -74,7 +74,7 @@ def cv_follow_line():
         # CVSteering.make_points(CVSteering, frame, line)
         new_angle = CVSteering.steering_angle(CVSteering(), path)
         adjusted_angle = CVSteering.steering_angle_adjustment(CVSteering(), new_angle, turn_limit = 30)
-    
+        Controllers.line_following(position/-30, speed)
         
 # import atexit
 # atexit.register(Motors.stop)
@@ -101,7 +101,7 @@ if __name__ == "__main__":
         
     elif choice == 'camerafollow':
         print('Following a line using the Camera and OpenCV')
-        cv_follow_line()
+        cv_follow_line(0)
     else:
         print('did nothing...')
         pass

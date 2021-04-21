@@ -377,7 +377,7 @@ class Controllers:
     def __init__(self):
         self.line_steering = -30
         
-    def gray_line_following(self, rob_pos, speed):
+    def line_following(self, rob_pos, speed):
         logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
         Motors().set_dir_servo_angle(rob_pos*self.line_steering)
         Motors().forward(speed)
