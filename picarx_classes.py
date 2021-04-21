@@ -326,7 +326,7 @@ class CVSteering:
         return [[x1, y1, x2, y2]]
     
     def steering_angle(self, path):
-        x1, y1, x2, y2 = lane_lines[0]
+        x1, y1, x2, y2 = path[0]
         x_offset = x2 - x1
         y_offset = y2 - y1
         drive_angle = math.atan(x_offset / y_offset * pi/ 180)
