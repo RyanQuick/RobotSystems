@@ -18,11 +18,11 @@ from picarx_classes import Motors, Sensors, Interpreters, Controllers, CVSteerin
 import time
 import cv2
 
-def move_forward(self,speed,length,angle):
-    Motors().set_dir_servo_angle(self,angle)
-    Motors().forward(self,speed)
+def move_forward(m,speed,length,angle):
+    Motors().set_dir_servo_angle(m,angle)
+    Motors().forward(m,speed)
     time.sleep(length)
-    Motors().stop()
+    Motors().stop(m)
     print('finished moving forward')
     
 def pl_park(speed, length, direction=-1):
@@ -80,14 +80,14 @@ def cv_follow_line(speed):
 # atexit.register(Motors.stop)
 
 if __name__ == "__main__":
-    # m = Motors()
-    # s = Sensors()
-    # i = Interpreters()
-    # c = Controllers()
+    m = Motors()
+    s = Sensors()
+    i = Interpreters()
+    c = Controllers()
     choice = input('Choose an action to take: (park, forward, kturn, grayfollow, camerafollow)')
     if choice == 'forward':
         print('moving forward...')
-        move_forward(50,2,0)
+        move_forward(m,50,2,0)
     elif choice == 'park':
         print('parking...')
         pl_park(75, 1.75,-1)
