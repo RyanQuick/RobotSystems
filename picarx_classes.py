@@ -315,18 +315,18 @@ class CVSteering:
 
 
     def make_points(self, frame, line):
-        logging.info("This is the line chosen by the car {0}".format(line))
-        height, width, _ = frame.shape
-        slope, intercept = line
-        y1 = height  # bottom of the frame
-        y2 = int(y1 * 1 / 2)  # make points from middle of the frame down
-    
-        # bound the coordinates within the frame
-        x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
-        x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
         if line is None:
             return None
         else:
+            logging.info("This is the line chosen by the car {0}".format(line))
+            height, width, _ = frame.shape
+            slope, intercept = line
+            y1 = height  # bottom of the frame
+            y2 = int(y1 * 1 / 2)  # make points from middle of the frame down
+        
+            # bound the coordinates within the frame
+            x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
+            x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
             return [x1, y1, x2, y2]
     
     def steering_angle(self, path):
