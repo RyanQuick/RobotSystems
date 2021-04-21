@@ -324,11 +324,14 @@ class CVSteering:
         # bound the coordinates within the frame
         x1 = max(-width, min(2 * width, int((y1 - intercept) / slope)))
         x2 = max(-width, min(2 * width, int((y2 - intercept) / slope)))
-        return [x1, y1, x2, y2]
+        if line is None:
+            return None
+        else:
+            return [x1, y1, x2, y2]
     
     def steering_angle(self, path):
         logging.info('This is the paths found by the camera: {0}'.format(path))
-        if path != []:
+        if path is None:
             x1, y1, x2, y2 = path[0]
             x_offset = x2 - x1
             y_offset = y2 - y1
