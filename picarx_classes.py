@@ -295,9 +295,7 @@ class CVSteering:
     def average_slope_intercept(self, frame, line_segments): 
         middle_lines = []
         lane_lines = []
-        if line_segments is None:
-            # logging.info('No line_segment segments detected')
-            return lane_lines
+        line_segments = []
         
         for line_segment in line_segments:
             logging.info('line segment: {0}'.format(line_segment))
@@ -311,6 +309,10 @@ class CVSteering:
                     middle_lines.append((slope, intercept)) 
                 else:
                     logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
+                    
+        if middle_lines is None:
+            # logging.info('No line_segment segments detected')
+            return lane_lines
         lane_lines.append(CVSteering.make_points(CVSteering(),frame, np.average(middle_lines,axis = 0)))
         return lane_lines
 
