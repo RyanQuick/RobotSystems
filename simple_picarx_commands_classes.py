@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # s = Sensors()
     # i = Interpreters()
     # c = Controllers()
-    choice = input('Choose an action to take: (park, forward, kturn, grayfollow, camera follow)')
+    choice = input('Choose an action to take: (park, forward, kturn, grayfollow, camerafollow)')
     if choice == 'forward':
         print('moving forward...')
         move_forward(50,2,0)
