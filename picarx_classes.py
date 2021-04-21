@@ -300,6 +300,7 @@ class CVSteering:
             return lane_lines
         
         for line_segment in line_segments:
+            logging.info('line segment: {0}'.format(line_segment))
             for x1, y1, x2, y2 in line_segment:
                 if x1 != x2:
                     fit = np.polyfit((x1, x2), (y1, y2), 1)
