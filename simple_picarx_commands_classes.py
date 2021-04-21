@@ -69,7 +69,7 @@ def cv_follow_line(speed):
         edges = cvs.look_for_color(frame)
         cropped_edges = cvs.crop_video(edges)
         line_segments = cvs.detect_line_segments(cropped_edges)
-        path = cvs.average_slope_intercept(frame, line_segments)
+        path = cvs.average_slope_intercept(cvs, frame, line_segments)
         # cvs.make_points(CVSteering, frame, line)
         new_angle = cvs.steering_angle(path)
         adjusted_angle = cvs.steering_angle_adjustment(new_angle, turn_limit = 30)
