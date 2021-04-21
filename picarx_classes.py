@@ -315,8 +315,8 @@ class CVSteering:
 
 
     def make_points(self, frame, line):
-        if line is None:
-            return None
+        if line == []:
+            return []
         else:
             logging.info("This is the line chosen by the car {0}".format(line))
             height, width, _ = frame.shape
@@ -331,7 +331,7 @@ class CVSteering:
     
     def steering_angle(self, path):
         logging.info('This is the paths found by the camera: {0}'.format(path))
-        if path is None:
+        if path !=[]:
             x1, y1, x2, y2 = path[0]
             x_offset = x2 - x1
             y_offset = y2 - y1
