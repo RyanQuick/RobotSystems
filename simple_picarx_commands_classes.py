@@ -35,7 +35,7 @@ def pl_park(speed, length, direction=-1):
     
     
 def k_turn(speed, length, direction=-1):
-    Motors.set_dir_servo_angle(Motors, direction*40)
+    Motors.set_dir_servo_angle(Motors(), direction*40)
     Motors.forward(Motors(), speed)
     time.sleep(length*.50)
     Motors.set_dir_servo_angle(Motors(), -direction*40)
@@ -66,14 +66,14 @@ def gray_follow_line(speed,length):
 
 def cv_follow_line():
     while True:
-        frame = CVSteering.start_cv(CVSteering)
-        edges = CVSteering.look_for_color(CVSteering, frame)
-        cropped_edges = CVSteering.crop_video(CVSteering, edges)
-        line_segments = CVSteering.detect_line_segments(CVSteering, cropped_edges)
-        path = CVSteering.average_slope_intercept(CVSteering, frame, line_segments)
+        frame = CVSteering.start_cv(CVSteering())
+        edges = CVSteering.look_for_color(CVSteering(), frame)
+        cropped_edges = CVSteering.crop_video(CVSteering(), edges)
+        line_segments = CVSteering.detect_line_segments(CVSteering(), cropped_edges)
+        path = CVSteering.average_slope_intercept(CVSteering(), frame, line_segments)
         # CVSteering.make_points(CVSteering, frame, line)
-        new_angle = CVSteering.steering_angle(CVSteering, path)
-        adjusted_angle = CVSteering.steering_angle_adjustment(CVSteering, new_angle, turn_limit = 30)
+        new_angle = CVSteering.steering_angle(CVSteering(), path)
+        adjusted_angle = CVSteering.steering_angle_adjustment(CVSteering(), new_angle, turn_limit = 30)
     
         
 # import atexit
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     # s = Sensors()
     # i = Interpreters()
     # c = Controllers()
-    choice = input('Choose an action to take: (park, forward, kturn, grayfollow)')
+    choice = input('Choose an action to take: (park, forward, kturn, grayfollow, camera follow)')
     if choice == 'forward':
         print('moving forward...')
         move_forward(50,2,0)
@@ -101,7 +101,6 @@ if __name__ == "__main__":
         
     elif choice == 'camerafollow':
         print('Following a line using the Camera and OpenCV')
-        length = int(input('How many Times?') or '1000')
         cv_follow_line()
     else:
         print('did nothing...')

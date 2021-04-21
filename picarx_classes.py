@@ -310,7 +310,7 @@ class CVSteering:
                 # if slope < 0:
                 #     if x1 < left_region_boundary and x2 < left_region_boundary:
                 middle_lines.append((slope, intercept))
-        lane_lines.append(make_points(frame, np.average(middle_lines,axis = 0)))
+        lane_lines.append(CVSteering.make_points(CVSteering(),frame, np.average(middle_lines,axis = 0)))
         return lane_lines
 
 
