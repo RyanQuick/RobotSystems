@@ -239,6 +239,9 @@ class Sensors:
 
 class CVSteering:
     
+    def __init__(self):
+        pass
+    
     def start_cv(self): 
         camera = cv2.VideoCapture(-1)
         camera.set(3, 640)

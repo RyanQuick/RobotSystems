@@ -35,7 +35,7 @@ def pl_park(speed, length, direction=-1):
     
     
 def k_turn(speed, length, direction=-1):
-    Motors.set_dir_servo_angle(Motors(), direction*40)
+    Motors.set_dir_servo_angle(Motors, direction*40)
     Motors.forward(Motors(), speed)
     time.sleep(length*.50)
     Motors.set_dir_servo_angle(Motors(), -direction*40)
@@ -66,14 +66,14 @@ def gray_follow_line(speed,length):
 
 def cv_follow_line():
     while True:
-        frame = CVSteering.start_cv()
-        edges = CVSteering.look_for_color(frame)
-        cropped_edges = CVSteering.crop_video(edges)
-        line_segments = CVSteering.detect_line_segments(cropped_edges)
-        path = CVSteering.average_slope_intercept(frame, line_segments)
-        # CVSteering.make_points(frame, line)
-        new_angle = CVSteering.steering_angle(path)
-        adjusted_angle = CVSteering.steering_angle_adjustment(new_angle, turn_limit = 30)
+        frame = CVSteering.start_cv(CVSteering)
+        edges = CVSteering.look_for_color(CVSteering, frame)
+        cropped_edges = CVSteering.crop_video(CVSteering, edges)
+        line_segments = CVSteering.detect_line_segments(CVSteering, cropped_edges)
+        path = CVSteering.average_slope_intercept(CVSteering, frame, line_segments)
+        # CVSteering.make_points(CVSteering, frame, line)
+        new_angle = CVSteering.steering_angle(CVSteering, path)
+        adjusted_angle = CVSteering.steering_angle_adjustment(CVSteering, new_angle, turn_limit = 30)
     
         
 # import atexit
