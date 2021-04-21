@@ -19,8 +19,8 @@ import time
 import cv2
 
 def move_forward(speed,length,angle):
-    Motors.set_dir_servo_angle(self, angle)
-    Motors.forward(self, speed)
+    Motors.set_dir_servo_angle(angle)
+    Motors.forward(speed)
     time.sleep(length)
     Motors.stop()
     print('finished moving forward')
