@@ -60,7 +60,7 @@ def test():
 
 def gray_follow_line(speed,length):
     for i in range(length):        
-        [position, adcs] = Interpreters.get_grayscale_value(Sensors.get_adc_value())
+        [position, adcs] = Interpreters.get_grayscale_value(Interpreters(),Sensors.get_adc_value())
         # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
         Controllers.line_following(position, speed)
 
