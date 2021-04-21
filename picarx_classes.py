@@ -326,7 +326,7 @@ class CVSteering:
         return [[x1, y1, x2, y2]]
     
     def steering_angle(self, path):
-        logging.info(type(path))
+        logging.info(len(path))
         x1, y1, x2, y2 = path
         x_offset = x2 - x1
         y_offset = y2 - y1
