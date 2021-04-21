@@ -19,10 +19,10 @@ import time
 import cv2
 
 def move_forward(speed,length,angle):
-    Motors.set_dir_servo_angle(Motors(), angle)
-    Motors.forward(Motors(), speed)
+    Motors.set_dir_servo_angle(self, angle)
+    Motors.forward(self, speed)
     time.sleep(length)
-    Motors.stop(Motors())
+    Motors.stop()
     print('finished moving forward')
     
 def pl_park(speed, length, direction=-1):
@@ -58,8 +58,8 @@ def test():
     Motors.camera_servo_pin2.angle(Motors(), 40)
     time.sleep(1)
 
-def gray_follow_line(speed,length):
-    for i in range(length):        
+def gray_follow_line(speed):
+    while True:        
         [position, adcs] = Interpreters.get_grayscale_value(Interpreters(),Sensors.get_adc_value(Sensors()))
         # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
         Controllers.line_following(Controllers(),position, speed)
@@ -96,8 +96,7 @@ if __name__ == "__main__":
         k_turn(75,2.25,-1)
     elif choice == 'grayfollow':
         print('Following a line using the ADC grayscale sensor')
-        length = int(input('How many Times?') or '1000')
-        gray_follow_line(0, length)
+        gray_follow_line(0)
         
     elif choice == 'camerafollow':
         print('Following a line using the Camera and OpenCV')

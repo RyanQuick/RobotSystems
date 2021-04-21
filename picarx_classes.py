@@ -374,14 +374,16 @@ class Interpreters:
           
 
 class Controllers:
+    line_steering = -30
+    
     def __init__(self):
-        self.line_steering = -30
+       pass 
         
     def line_following(self, rob_pos, speed):
-        logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
-        Motors().set_dir_servo_angle(rob_pos*self.line_steering)
+        logging.info("steering angle: {0}, speed: {1}".format(rob_pos*Controllers.line_steering,speed))
+        Motors().set_dir_servo_angle(rob_pos*Controllers.line_steering)
         Motors().forward(speed)
-        return rob_pos*self.line_steering
+        return rob_pos*Controllers.line_steering
 
         
 if __name__ == "__main__":
