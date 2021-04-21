@@ -60,20 +60,21 @@ def test():
 
 def gray_follow_line(speed,length):
     for i in range(length):        
-        [position, adcs] = Interpreters().getGrayscaleValue(Sensors().get_adc_value())
+        [position, adcs] = Interpreters.get_grayscale_value(Sensors.get_adc_value())
         # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
-        Controllers().line_following(position, speed)
+        Controllers.line_following(position, speed)
 
 def cv_follow_line():
-    frame = 
-    edges = CVSteering.look_for_color(frame)
-    cropped_edges = CVSteering.crop_video(edges)
-    line_segments = CVSteering.detect_line_segments(cropped_edges)
-    path = CVSteering.average_slope_intercept(frame, line_segments)
-    # CVSteering.make_points(frame, line)
-    CVSteering.steering_angle(path)
-    CVSteering.steering_angle_adjustment(current_angle, new_angle, turn_limit)
-        
+    while True:
+        frame = CVSteering.start_cv()
+        edges = CVSteering.look_for_color(frame)
+        cropped_edges = CVSteering.crop_video(edges)
+        line_segments = CVSteering.detect_line_segments(cropped_edges)
+        path = CVSteering.average_slope_intercept(frame, line_segments)
+        # CVSteering.make_points(frame, line)
+        new_angle = CVSteering.steering_angle(path)
+        adjusted_angle = CVSteering.steering_angle_adjustment(new_angle, turn_limit = 30)
+    
         
 # import atexit
 # atexit.register(Motors.stop)
@@ -97,6 +98,11 @@ if __name__ == "__main__":
         print('Following a line using the ADC grayscale sensor')
         length = int(input('How many Times?') or '1000')
         gray_follow_line(0, length)
+        
+    elif choice == 'camerafollow':
+        print('Following a line using the Camera and OpenCV')
+        length = int(input('How many Times?') or '1000')
+        cv_follow_line()
     else:
         print('did nothing...')
         pass

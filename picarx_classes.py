@@ -3,6 +3,7 @@
 import time
 from math import tan, pi
 import numpy as np
+import cv2
 
 try :
     from ezblock import __reset_mcu__
@@ -237,10 +238,28 @@ class Sensors:
         return adc_value_list
 
 class CVSteering:
-    def look_for_color(self):
+    
+    def start_cv(self): 
+        camera = cv2.VideoCapture(-1)
+        camera.set(3, 640)
+        camera.set(4, 480)
+        # while( camera.isOpened()):
+        _, image = camera.read()
+        return image        
+            # cv2.imshow('Original', image)
+            
+        #b_w_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            # cv2.imshow('B/W', b_w_image)
+            
+        #if cv2.waitKey(1) & 0xFF == ord('q') :
+        #    break
+            
+    cv2.destroyAllWindows()
+    
+    def look_for_color(self, frame):
         upper_black = np.array([20,20,20])
         lower_black = np.array([0,0,0])
-        frame = cv2.imread('/home/pi/DeepPiCar/driver/data/road1_240x320.png')
+        # frame = cv2.imread('/home/pi/DeepPiCar/driver/data/road1_240x320.png')
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(hsv,lower_black,upper_black)
         edges = cv2.Canny(mask, 200, 400)
@@ -310,13 +329,13 @@ class CVSteering:
         drive_angle = math.atan(x_offset / y_offset * pi/ 180)
         return drive_angle
         
-    def steering_angle_adjustment(self, current_angle, new_angle, turn_limit):
-        angle_diff = new_angle - current_angle
+    def steering_angle_adjustment(self, new_angle, turn_limit):
+        angle_diff = new_angle - Motors.steering_dir_val
         if abs(angle_diff) > turn_limit:
-            adjusted_angle = current_angle + turn_limit * angle_diff / abs(angle_diff)
+            adjusted_angle = Motors.steering_dir_val + turn_limit * angle_diff / abs(angle_diff)
         else:
             adjusted_angle = new_angle
-            return adjusted_angle    
+        return adjusted_angle    
         
         
 class Interpreters:
@@ -324,7 +343,7 @@ class Interpreters:
         self.sensitivity = 200
         self.polarity = 1 # Means black line
         
-    def getGrayscaleValue(self, adcs):
+    def get_grayscale_value(self, adcs):
         if abs(adcs[0] - adcs[2]) > self.sensitivity:
             if adcs[0] < adcs[2]:
                 if adcs[0] + abs((adcs[2]-adcs[0])/4) > adcs[1]:
@@ -347,7 +366,7 @@ class Controllers:
     def __init__(self):
         self.line_steering = -30
         
-    def line_following(self, rob_pos, speed):
+    def gray_line_following(self, rob_pos, speed):
         logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
         Motors().set_dir_servo_angle(rob_pos*self.line_steering)
         Motors().forward(speed)
