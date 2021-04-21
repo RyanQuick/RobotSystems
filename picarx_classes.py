@@ -296,25 +296,26 @@ class CVSteering:
         middle_lines = []
         lane_lines = []
         if line_segments is None:
-            logging.info('No line_segment segments detected')
+            # logging.info('No line_segment segments detected')
             return lane_lines
         
         for line_segment in line_segments:
             for x1, y1, x2, y2 in line_segment:
                 if x1 == x2:
-                    logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
+                    # logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
                     continue
                 fit = np.polyfit((x1, x2), (y1, y2), 1)
                 slope = fit[0]
                 intercept = fit[1]
                 # if slope < 0:
                 #     if x1 < left_region_boundary and x2 < left_region_boundary:
-                middle_lines.append((slope, intercept))
+                middle_lines.append((slope, intercept)) 
         lane_lines.append(CVSteering.make_points(CVSteering(),frame, np.average(middle_lines,axis = 0)))
         return lane_lines
 
 
     def make_points(self, frame, line):
+        logging.info("This is the line chosen by the car {0}".format(line))
         height, width, _ = frame.shape
         slope, intercept = line
         y1 = height  # bottom of the frame
