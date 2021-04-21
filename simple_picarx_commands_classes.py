@@ -74,7 +74,7 @@ def cv_follow_line(speed):
         # CVSteering.make_points(CVSteering, frame, line)
         new_angle = CVSteering.steering_angle(CVSteering(), path)
         adjusted_angle = CVSteering.steering_angle_adjustment(CVSteering(), new_angle, turn_limit = 30)
-        Controllers.line_following(Controllers(),position/-30, speed)
+        Controllers.line_following(Controllers(),adjusted_angle/-30, speed)
         
 # import atexit
 # atexit.register(Motors.stop)
