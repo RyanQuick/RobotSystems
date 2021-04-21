@@ -260,7 +260,7 @@ class CVSteering:
     cv2.destroyAllWindows()
     
     def look_for_color(self, frame):
-        upper_black = np.array([20,20,20])
+        upper_black = np.array([40,40,40])
         lower_black = np.array([0,0,0])
         # frame = cv2.imread('/home/pi/DeepPiCar/driver/data/road1_240x320.png')
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
@@ -318,7 +318,7 @@ class CVSteering:
         if line == []:
             return []
         else:
-            logging.info("This is the line chosen by the car {0}".format(line))
+            # logging.info("This is the line chosen by the car {0}".format(line))
             height, width, _ = frame.shape
             slope, intercept = line
             y1 = height  # bottom of the frame
@@ -330,7 +330,7 @@ class CVSteering:
             return [x1, y1, x2, y2]
     
     def steering_angle(self, path):
-        logging.info('This is the paths found by the camera: {0}'.format(path))
+        # logging.info('This is the paths found by the camera: {0}'.format(path))
         if path !=[]:
             x1, y1, x2, y2 = path[0]
             x_offset = x2 - x1
@@ -346,6 +346,7 @@ class CVSteering:
             adjusted_angle = Motors.steering_dir_val + turn_limit * angle_diff / abs(angle_diff)
         else:
             adjusted_angle = new_angle
+        logging.info('Angle from camera: {0}'.format(adjusted_angle))
         return adjusted_angle    
         
         
@@ -376,7 +377,7 @@ class Interpreters:
 class Controllers:
     
     def __init__(self):
-       self.line_steering = 30 
+       self.line_steering = -30 
         
     def line_following(self, m, rob_pos, speed):
         logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
