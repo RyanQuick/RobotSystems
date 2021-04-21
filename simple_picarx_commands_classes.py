@@ -22,7 +22,7 @@ def move_forward(speed,length,angle):
     Motors.set_dir_servo_angle(Motors(), angle)
     Motors.forward(Motors(), speed)
     time.sleep(length)
-    Motors.stop(m)
+    Motors.stop(Motors())
     print('finished moving forward')
     
 def pl_park(speed, length, direction=-1):
@@ -60,9 +60,9 @@ def test():
 
 def gray_follow_line(speed,length):
     for i in range(length):        
-        [position, adcs] = Interpreters.get_grayscale_value(Interpreters(),Sensors.get_adc_value())
+        [position, adcs] = Interpreters.get_grayscale_value(Interpreters(),Sensors.get_adc_value(Sensors()))
         # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
-        Controllers.line_following(position, speed)
+        Controllers.line_following(Controllers(),position, speed)
 
 def cv_follow_line(speed):
     while True:
@@ -74,7 +74,7 @@ def cv_follow_line(speed):
         # CVSteering.make_points(CVSteering, frame, line)
         new_angle = CVSteering.steering_angle(CVSteering(), path)
         adjusted_angle = CVSteering.steering_angle_adjustment(CVSteering(), new_angle, turn_limit = 30)
-        Controllers.line_following(position/-30, speed)
+        Controllers.line_following(Controllers(),position/-30, speed)
         
 # import atexit
 # atexit.register(Motors.stop)
