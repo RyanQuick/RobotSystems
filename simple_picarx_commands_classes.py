@@ -19,50 +19,49 @@ import time
 import cv2
 
 def move_forward(m,speed,length,angle):
-    Motors().set_dir_servo_angle(m,angle)
-    Motors().forward(m,speed)
+    m.set_dir_servo_angle(angle)
+    m.forward(speed)
     time.sleep(length)
-    Motors().stop(m)
+    m.stop()
     print('finished moving forward')
     
 def pl_park(speed, length, direction=-1):
-    Motors.set_dir_servo_angle(Motors(), direction*40)
-    Motors.backward(Motors(), speed)
+    m.set_dir_servo_angle(direction*40)
+    m.backward(speed)
     time.sleep(length*.50)
-    Motors.set_dir_servo_angle(Motors(), -direction*40)
-    Motors.backward(Motors(), speed)
+    m.set_dir_servo_angle(-direction*40)
+    m.backward(speed)
     time.sleep(length*.50)
     
     
 def k_turn(speed, length, direction=-1):
-    Motors.set_dir_servo_angle(Motors(), direction*40)
-    Motors.forward(Motors(), speed)
+    m.set_dir_servo_angle(direction*40)
+    m.forward(speed)
     time.sleep(length*.50)
-    Motors.set_dir_servo_angle(Motors(), -direction*40)
-    Motors.backward(Motors(), speed)
+    m.set_dir_servo_angle(-direction*40)
+    m.backward(speed)
     time.sleep(length*.50)
-    Motors.set_dir_servo_angle(Motors(), direction*40)
-    Motors.forward(Motors(), speed)
-    time.sleep(length*.50)   
-    Motors()
+    m.set_dir_servo_angle(direction*40)
+    m.forward(speed)
+    time.sleep(length*.50)
     
 def test():
-    Motors.set_dir_servo_angle(Motors(), -40)
-    Motors.camera_servo_pin1.angle(Motors(), -40)
-    Motors.camera_servo_pin2.angle(Motors(), -40)
+    m.set_dir_servo_angle(-40)
+    m.camera_servo_pin1.angle(-40)
+    m.camera_servo_pin2.angle(-40)
     time.sleep(1)
-    Motors.set_motor_speed(Motors(), 1, 1)
-    Motors.set_motor_speed(Motors(), 2, 1)
-    Motors.set_dir_servo_angle(Motors(), 40)
-    Motors.camera_servo_pin1.angle(Motors(), 40)
-    Motors.camera_servo_pin2.angle(Motors(), 40)
+    m.set_motor_speed(1, 1)
+    m.set_motor_speed(2, 1)
+    m.set_dir_servo_angle(40)
+    m.camera_servo_pin1.angle(40)
+    m.camera_servo_pin2.angle(40)
     time.sleep(1)
 
 def gray_follow_line(speed):
     while True:        
-        [position, adcs] = Interpreters.get_grayscale_value(Interpreters(),Sensors.get_adc_value(Sensors()))
+        [position, adcs] = i.get_grayscale_value(s.get_adc_value())
         # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
-        Controllers.line_following(Controllers(),position, speed)
+        c.line_following(position, speed)
 
 def cv_follow_line(speed):
     while True:
@@ -90,7 +89,7 @@ if __name__ == "__main__":
         move_forward(m,50,2,0)
     elif choice == 'park':
         print('parking...')
-        pl_park(75, 1.75,-1)
+        pl_park(m,75, 1.75,-1)
     elif choice == 'kturn':
         print('turning around...')
         k_turn(75,2.25,-1)
