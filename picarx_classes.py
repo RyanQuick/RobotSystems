@@ -311,7 +311,7 @@ class CVSteering:
                     logging.info('skipping vertical line segment (slope=inf): %s' % line_segment)
                     
         if middle_lines is None:
-            # logging.info('All lines were vertical')
+            logging.info('All lines were vertical')
             return []
         lane_lines.append(cvs.make_points(frame, np.average(middle_lines,axis = 0)))
         return lane_lines

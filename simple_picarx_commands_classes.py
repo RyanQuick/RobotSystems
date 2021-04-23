@@ -100,7 +100,7 @@ if __name__ == "__main__":
         
     elif choice == 'camerafollow':
         print('Following a line using the Camera and OpenCV')
-        cv_follow_line(0)
+        cv_follow_line(50)
     else:
         print('did nothing...')
         pass
