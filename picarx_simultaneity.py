@@ -69,6 +69,8 @@ def controller_consumer(out_bus, delay, speed):
             time.sleep(delay)
             
 def simultaneity(speed):
+    logging.info("Starting bus grayscale line chasing")
+
     sensor_delay = 0.2
     interpreter_delay = 0.2
     controller_delay = 0.2
@@ -84,4 +86,4 @@ def simultaneity(speed):
             
         
 if __name__ == "__main__":
-    simultaneity()
+    simultaneity(0)
