@@ -61,8 +61,7 @@ def interpreter_cp(in_bus, out_bus, delay):
         if in_bus.read() != None:
             [position, adcs] = i.get_grayscale_value(in_bus.read())
             out_bus.write(position)
-            logging.info("out bus: {0}".format(out_bus.read()))
-            logging.info("position values: {0}".format(position))
+            # logging.info("out bus: {0}".format(out_bus.read()))
             time.sleep(delay)
         else:
             time.sleep(delay)
@@ -70,6 +69,7 @@ def interpreter_cp(in_bus, out_bus, delay):
 def controller_consumer(out_bus, delay, speed):
     c = Controllers()
     m = Motors()
+    logging.info("popped controller function")
     while True:
         logging.info("out bus: {0}".format(out_bus.read()))
         if out_bus.read() != None:
