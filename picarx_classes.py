@@ -198,44 +198,61 @@ class Motors:
 
 
 
+
+
+  
+
+
 class Sensors:
     def __init__(self):
         self.S0 = ADC('A0')
         self.S1 = ADC('A1')
         self.S2 = ADC('A2')
 
-    # def Get_distance(self):
-    #     timeout=0.01
-    #     trig = Pin('D8')
-    #     echo = Pin('D9')
-    
-    #     trig.low()
-    #     time.sleep(0.01)
-    #     trig.high()
-    #     time.sleep(0.000015)
-    #     trig.low()
-    #     pulse_end = 0
-    #     pulse_start = 0
-    #     timeout_start = time.time()
-    #     while echo.value()==0:
-    #         pulse_start = time.time()
-    #         if pulse_start - timeout_start > timeout:
-    #             return -1
-    #     while echo.value()==1:
-    #         pulse_end = time.time()
-    #         if pulse_end - timeout_start > timeout:
-    #             return -2
-    #     during = pulse_end - pulse_start
-    #     cm = round(during * 340 / 2 * 100, 2)
-    #     #print(cm)
-    #     return cm
+
     
     def get_adc_value(self):
         adc_value_list = []
         adc_value_list.append(self.S0.read())
         adc_value_list.append(self.S1.read())
         adc_value_list.append(self.S2.read())
-        return adc_value_list
+        return adc_value_list       
+        
+class Interpreters:
+    def __init__(self):
+        self.sensitivity = 200
+        self.polarity = 1 # Means black line
+        
+    def get_grayscale_value(self, adcs):
+        if abs(adcs[0] - adcs[2]) > self.sensitivity:
+            if adcs[0] < adcs[2]:
+                if adcs[0] + abs((adcs[2]-adcs[0])/4) > adcs[1]:
+                    rob_pos = .5 * self.polarity   
+                else:
+                    rob_pos = 1* self.polarity
+            else:
+                if adcs[2]+abs((adcs[2]-adcs[0])/4) < adcs[1]:
+                    rob_pos = -1 * self.polarity   
+                else:
+                    rob_pos = -.5* self.polarity
+        else:
+            rob_pos = 0
+                
+                
+        return rob_pos, adcs
+          
+
+class Controllers:
+    
+    def __init__(self):
+       self.line_steering = -30 
+        
+    def line_following(self, m, rob_pos, speed):
+        logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
+        m.set_dir_servo_angle(rob_pos*self.line_steering)
+        m.forward(speed)
+        return rob_pos*self.line_steering
+
 
 class CVSteering:
     
@@ -350,44 +367,7 @@ class CVSteering:
         else:
             adjusted_angle = new_angle
         logging.info('Angle from camera: {0}'.format(adjusted_angle))
-        return adjusted_angle    
-        
-        
-class Interpreters:
-    def __init__(self):
-        self.sensitivity = 200
-        self.polarity = 1 # Means black line
-        
-    def get_grayscale_value(self, adcs):
-        if abs(adcs[0] - adcs[2]) > self.sensitivity:
-            if adcs[0] < adcs[2]:
-                if adcs[0] + abs((adcs[2]-adcs[0])/4) > adcs[1]:
-                    rob_pos = .5 * self.polarity   
-                else:
-                    rob_pos = 1* self.polarity
-            else:
-                if adcs[2]+abs((adcs[2]-adcs[0])/4) < adcs[1]:
-                    rob_pos = -1 * self.polarity   
-                else:
-                    rob_pos = -.5* self.polarity
-        else:
-            rob_pos = 0
-                
-                
-        return rob_pos, adcs
-          
-
-class Controllers:
-    
-    def __init__(self):
-       self.line_steering = -30 
-        
-    def line_following(self, m, rob_pos, speed):
-        logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
-        m.set_dir_servo_angle(rob_pos*self.line_steering)
-        m.forward(speed)
-        return rob_pos*self.line_steering
-
+        return adjusted_angle  
         
 if __name__ == "__main__":
     pass 
@@ -402,4 +382,30 @@ if __name__ == "__main__":
     #     c.line_following(position, 0)
 
     
+
+    # def Get_distance(self):
+    #     timeout=0.01
+    #     trig = Pin('D8')
+    #     echo = Pin('D9')
+    
+    #     trig.low()
+    #     time.sleep(0.01)
+    #     trig.high()
+    #     time.sleep(0.000015)
+    #     trig.low()
+    #     pulse_end = 0
+    #     pulse_start = 0
+    #     timeout_start = time.time()
+    #     while echo.value()==0:
+    #         pulse_start = time.time()
+    #         if pulse_start - timeout_start > timeout:
+    #             return -1
+    #     while echo.value()==1:
+    #         pulse_end = time.time()
+    #         if pulse_end - timeout_start > timeout:
+    #             return -2
+    #     during = pulse_end - pulse_start
+    #     cm = round(during * 340 / 2 * 100, 2)
+    #     #print(cm)
+    #     return cm
     

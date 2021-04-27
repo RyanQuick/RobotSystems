@@ -15,6 +15,7 @@ except ImportError:
     from sim_ezblock import *
 
 from picarx_classes import Motors, Sensors, Interpreters, Controllers, CVSteering
+from picarx_simultaneity import simultaneity
 import time
 import cv2
 
@@ -74,9 +75,10 @@ def cv_follow_line(speed):
         new_angle = cvs.steering_angle(path)
         adjusted_angle = cvs.steering_angle_adjustment(new_angle, turn_limit = 30)
         c.line_following(m,adjusted_angle/-30, speed)
+
+def gray_follow_line_bus(speed):
+    simultaneity(speed)
         
-# import atexit
-# atexit.register(Motors.stop)
 
 if __name__ == "__main__":
     m = Motors()
@@ -97,10 +99,12 @@ if __name__ == "__main__":
     elif choice == 'grayfollow':
         print('Following a line using the ADC grayscale sensor')
         gray_follow_line(0)
-        
     elif choice == 'camerafollow':
         print('Following a line using the Camera and OpenCV')
         cv_follow_line(0)
+    elif choice == 'grayfollow2':
+        print('Following a line using bus & grayscale sensor')
+        gray_follow_line_bus()
     else:
         print('did nothing...')
         pass
