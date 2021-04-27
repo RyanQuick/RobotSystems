@@ -52,9 +52,9 @@ def sensor_producer(in_bus, delay):
 def interpreter_cp(in_bus, out_bus, delay):
     i = Interpreters()
     while True:
-        logging.info("in_bus: {0}".format(in_bus.read))
-        if in_bus.read != None:
-            [position, adcs] = i.get_grayscale_value(in_bus.read)
+        logging.info("in_bus: {0}".format(in_bus.read()))
+        if in_bus.read() != None:
+            [position, adcs] = i.get_grayscale_value(in_bus.read())
             out_bus.write(position)
             logging.info("position values: {0}".format(position))
             time.sleep(delay)
@@ -65,8 +65,8 @@ def controller_consumer(out_bus, delay, speed):
     c = Controllers()
     m = Motors()
     while True:
-        if out_bus.read != None:
-            c.line_following(m, position, speed)
+        if out_bus.read() != None:
+            c.line_following(m, out_bus.read(), speed)
             time.sleep(delay)
         else:
             time.sleep(delay)
