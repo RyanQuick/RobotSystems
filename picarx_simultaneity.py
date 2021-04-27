@@ -45,7 +45,6 @@ def sensor_producer(in_bus, delay):
         with lock:
             adcs = s.get_adc_value()
         in_bus.write(adcs)
-        logging.info("adc values: {0}".format(adcs))
         time.sleep(delay)
         
     
@@ -56,6 +55,7 @@ def interpreter_cp(in_bus, out_bus, delay):
         if in_bus.read != None:
             [position, adcs] = i.get_grayscale_value(in_bus.read)
             out_bus.write(position)
+            logging.info("position values: {0}".format(position))
             time.sleep(delay)
         else:
             time.sleep(delay)
