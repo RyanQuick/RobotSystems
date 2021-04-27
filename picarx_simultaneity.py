@@ -83,7 +83,7 @@ def simultaneity(speed):
     
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
         bus_sensor = executor.submit(sensor_producer, in_bus, sensor_delay)
-        bus_interpreter = executor.submit(interpretation_cp, in_bus, out_bus, interpreter_delay)
+        bus_interpreter = executor.submit(interpreter_cp, in_bus, out_bus, interpreter_delay)
         bus_controller = executor.submit(controller_consumer, in_bus, controller_delay, speed)
             
             
