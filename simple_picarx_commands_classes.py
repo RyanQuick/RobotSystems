@@ -104,7 +104,7 @@ if __name__ == "__main__":
         cv_follow_line(0)
     elif choice == 'grayfollow2':
         print('Following a line using bus & grayscale sensor')
-        gray_follow_line_bus()
+        gray_follow_line_bus(0)
     else:
         print('did nothing...')
         pass
