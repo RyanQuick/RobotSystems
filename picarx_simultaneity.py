@@ -32,10 +32,15 @@ class DataBus:
         self.message = 0
         
     def read(self):
-        return self.messages
+        return self.message
     
     def write(self, msg):
         self.message = msg
+    
+    def test(self):
+        print(self.read())
+        self.write('a')
+        print(self.read())
 
 
 def sensor_producer(in_bus, delay):
@@ -89,4 +94,6 @@ def simultaneity(speed):
             
         
 if __name__ == "__main__":
-    simultaneity(0)
+    # simultaneity(0)
+    b = DataBus()
+    b.test()
