@@ -69,9 +69,7 @@ def interpreter_cp(in_bus, out_bus, delay):
 def controller_consumer(out_bus, delay, speed):
     c = Controllers()
     m = Motors()
-    logging.info("popped controller function")
     while True:
-        logging.info("out bus: {0}".format(out_bus.read()))
         if out_bus.read() != None:
             c.line_following(m, out_bus.read(), speed)
             time.sleep(delay)
@@ -79,7 +77,6 @@ def controller_consumer(out_bus, delay, speed):
             time.sleep(delay)
             
 def simultaneity(speed):
-    logging.info("Starting bus grayscale line chasing")
 
     sensor_delay = 0.2
     interpreter_delay = 0.2
@@ -92,11 +89,10 @@ def simultaneity(speed):
         bus_sensor = executor.submit(sensor_producer, in_bus, sensor_delay)
         bus_interpreter = executor.submit(interpreter_cp, in_bus, out_bus, interpreter_delay)
         bus_controller = executor.submit(controller_consumer, out_bus, controller_delay, speed)
-        logging.info("Continuing bus grayscale line chasing")
 
-            
+    eSensor.result()
+
         
 if __name__ == "__main__":
-    # simultaneity(0)
     b = DataBus()
     b.test()

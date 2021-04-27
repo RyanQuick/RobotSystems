@@ -86,7 +86,7 @@ if __name__ == "__main__":
     i = Interpreters()
     c = Controllers()
     cvs = CVSteering()
-    choice = input('Choose an action to take: (park, forward, kturn, grayfollow, camerafollow)')
+    choice = input('Choose an action to take: (park, forward, kturn, grayfollow, camerafollow, grayfollow2)')
     if choice == 'forward':
         print('moving forward...')
         move_forward(m,50,2,0)
