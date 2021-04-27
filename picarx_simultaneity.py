@@ -66,9 +66,10 @@ def interpreter_cp(in_bus, out_bus, delay):
         else:
             time.sleep(delay)
     
-def controller_consumer(out_bus, delay, speed):
+def controller_consumer(out_bus, delay):
     c = Controllers()
     m = Motors()
+    speed = 0
     logging.info("popped controller function")
     while True:
         logging.info("out bus: {0}".format(out_bus.read()))
@@ -91,7 +92,7 @@ def simultaneity(speed):
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
         bus_sensor = executor.submit(sensor_producer, in_bus, sensor_delay)
         bus_interpreter = executor.submit(interpreter_cp, in_bus, out_bus, interpreter_delay)
-        bus_controller = executor.submit(controller_consumer, out_bus, controller_delay, speed)
+        bus_controller = executor.submit(controller_consumer, out_bus, controller_delay)
             
             
         
