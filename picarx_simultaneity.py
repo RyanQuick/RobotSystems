@@ -52,6 +52,7 @@ def sensor_producer(in_bus, delay):
 def interpreter_cp(in_bus, out_bus, delay):
     i = Interpreters()
     while True:
+        logging.info("in_bus: {0}".format(in_bus.read))
         if in_bus.read != None:
             [position, adcs] = i.get_grayscale_value(in_bus.read)
             out_bus.write(position)
