@@ -2,7 +2,7 @@
 import concurrent.futures
 import time
 import logging
-from threading import Lock
+from readerwriterlock import rwlock
 from logdecorator import log_on_start, log_on_end, log_on_error
 
 DEBUG = logging.DEBUG
@@ -20,18 +20,26 @@ class Bus:
         self.message = initial_message
         self.name = name
 
+        # Set up the class so that functions can get a lock while working
+        self.lock = rwlock.RWLockWriteD()
+
     @log_on_start(DEBUG, "{self.name:s}: Initiating read by {_name:s}")
     @log_on_error(DEBUG, "{self.name:s}: Error on read by {_name:s}")
     @log_on_end(DEBUG, "{self.name:s}: Finished read by {_name:s}")
     def get_message(self, _name):
-        message = self.message
+
+        with self.lock.gen_rlock():
+            message = self.message
+
         return message
 
     @log_on_start(DEBUG, "{self.name:s}: Initiating write by {_name:s}")
     @log_on_error(DEBUG, "{self.name:s}: Error on write by {_name:s}")
     @log_on_end(DEBUG, "{self.name:s}: Finished write by {_name:s}")
     def set_message(self, message, _name):
-        self.message = message
+
+        with self.lock.gen_wlock():
+            self.message = message
 
 
 # Create a set of default input and output busses
@@ -76,9 +84,6 @@ class ConsumerProducer:
         self.termination_busses = ensureTuple(termination_busses)
         self.name = name
 
-        # Set up the class so that functions can get a lock while working
-        self.lock = Lock()
-
     @log_on_start(DEBUG, "{self.name:s}: Starting consumer-producer service")
     @log_on_error(DEBUG, "{self.name:s}: Encountered an error while closing down consumer-producer")
     @log_on_end(DEBUG, "{self.name:s}: Closing down consumer-producer service")
@@ -91,18 +96,14 @@ class ConsumerProducer:
             if self.checkTerminationBusses():
                 break
 
-            # with self.lock: makes the collection of the values atomic
-            with self.lock:
-                # Collect all of the values from the input busses into a list
-                input_values = self.collectBussesToValues(self.input_busses)
+            # Collect all of the values from the input busses into a list
+            input_values = self.collectBussesToValues(self.input_busses)
 
             # Get the output value or tuple of values corresponding to the inputs
             output_values = self.consumer_producer_function(*input_values)
 
-            # with self.lock: makes the distribution of the values atomic
-            with self.lock:
-                # Deal the values into the output busses
-                self.dealValuesToBusses(output_values, self.output_busses)
+            # Deal the values into the output busses
+            self.dealValuesToBusses(output_values, self.output_busses)
 
             # Pause for set amount of time
             time.sleep(self.delay)
