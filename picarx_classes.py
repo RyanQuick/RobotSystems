@@ -208,7 +208,8 @@ class Sensors:
         self.S0 = ADC('A0')
         self.S1 = ADC('A1')
         self.S2 = ADC('A2')
-
+        self.trig = Pin('D8')
+        self.echo = Pin('D9')
 
     
     def get_adc_value(self):
@@ -216,13 +217,40 @@ class Sensors:
         adc_value_list.append(self.S0.read())
         adc_value_list.append(self.S1.read())
         adc_value_list.append(self.S2.read())
-        return adc_value_list       
+        return adc_value_list  
+
+    def get_distance(self):
+        timeout=0.01
+        self.trig = Pin('D8')
+        self.echo = Pin('D9')
+    
+        self.trig.low()
+        time.sleep(0.01)
+        self.trig.high()
+        time.sleep(0.000015)
+        self.trig.low()
+        pulse_end = 0
+        pulse_start = 0
+        timeout_start = time.time()
+        while self.echo.value()==0:
+            pulse_start = time.time()
+            if pulse_start - timeout_start > timeout:
+                return -1
+        while self.echo.value()==1:
+            pulse_end = time.time()
+            if pulse_end - timeout_start > timeout:
+                return -2
+        during = pulse_end - pulse_start
+        cm = round(during * 340 / 2 * 100, 2)
+        #print(cm)
+        return during
         
 class Interpreters:
     def __init__(self):
         self.sensitivity = 200
         self.polarity = 1 # Means black line
-        
+
+    
     def get_grayscale_value(self, adcs):
         if abs(adcs[0] - adcs[2]) > self.sensitivity:
             if adcs[0] < adcs[2]:
@@ -252,7 +280,11 @@ class Controllers:
         m.set_dir_servo_angle(rob_pos*self.line_steering)
         m.forward(speed)
         return rob_pos*self.line_steering
-
+    
+    def wall_checking(self, m, cm):
+        if 0 < cm < 5:
+            logging.info("About to hit an obstacle @ {0}".format(cm))
+            m.forward(0)
 
 class CVSteering:
     
@@ -383,29 +415,5 @@ if __name__ == "__main__":
 
     
 
-    # def Get_distance(self):
-    #     timeout=0.01
-    #     trig = Pin('D8')
-    #     echo = Pin('D9')
-    
-    #     trig.low()
-    #     time.sleep(0.01)
-    #     trig.high()
-    #     time.sleep(0.000015)
-    #     trig.low()
-    #     pulse_end = 0
-    #     pulse_start = 0
-    #     timeout_start = time.time()
-    #     while echo.value()==0:
-    #         pulse_start = time.time()
-    #         if pulse_start - timeout_start > timeout:
-    #             return -1
-    #     while echo.value()==1:
-    #         pulse_end = time.time()
-    #         if pulse_end - timeout_start > timeout:
-    #             return -2
-    #     during = pulse_end - pulse_start
-    #     cm = round(during * 340 / 2 * 100, 2)
-    #     #print(cm)
-    #     return cm
+
     

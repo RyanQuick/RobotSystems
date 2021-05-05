@@ -32,9 +32,13 @@ def multimodal_grayscale():
     c = Controllers()
     m = Motors()
     
-    sensor_producer = Producer(s.get_adc_value(),delay = sensor_delay, name = "sensor_producer")
-    interpreter_cp = ConsumerProducer(i.get_grayscale_value(),delay = interpreter_delay, name = "interpreter_cp")
-    controller_consumer = Consumer(c.line_following(m, out_bus.read(), speed),delay = interpreter_delay, name = "interpreter_cp")
-    runConcurrently([sensor_producer,interpreter_cp,controller_consumer])
+    grayscale_producer = Producer(s.get_adc_value(),delay = sensor_delay, name = "grayscale_producer")
+    grayscale_cp = ConsumerProducer(i.get_grayscale_value(),delay = interpreter_delay, name = "grayscale_cp")
+    grayscale_consumer = Consumer(c.line_following(m, out_bus.read(), speed),delay = interpreter_delay, name = "grayscale_cp")
+    
+    ultras_producer = Producer(s.get_distance(), delay = sensor_delay, name = "ultras_producer")
+    ultras_consumer = Consumer(c.wall_checking(m, out_bus.read()),delay = interpreter_delay, name = "ultras_cp")
+    
+    runConcurrently([grayscale_producer, grayscale_cp, grayscale_consumer, ultras_producer, ultras_consumer])
     
     
