@@ -320,6 +320,7 @@ def runConcurrently(producer_consumer_list):
 
         # Loop over the list of provided functions, turning each into an executor for the thread pool
         for cp in producer_consumer_list:
+            logging.info("bus list: {0}".format(cp))
             executor_list.append(executor.submit(cp))
 
     # Loop over the executors that were created above, running their result methods
