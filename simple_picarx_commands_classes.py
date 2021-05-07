@@ -105,6 +105,9 @@ if __name__ == "__main__":
     elif choice == 'grayfollow2':
         print('Following a line using bus & grayscale sensor')
         gray_follow_line_bus(0)
+    elif choice == 'grayfollow3':
+        print('Following a line using RossROS & grayscale sensor')
+        gray_follow_line_bus(0)
     else:
         print('did nothing...')
         pass

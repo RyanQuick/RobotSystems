@@ -38,7 +38,7 @@ def multimodal_grayscale():
     
     ultras_producer = Producer(s.get_distance(), delay = sensor_delay, name = "ultras_producer")
     ultras_consumer = Consumer(c.wall_checking(m, out_bus.read()),delay = interpreter_delay, name = "ultras_cp")
-    
+    print('made it here')
     runConcurrently([grayscale_producer, grayscale_cp, grayscale_consumer, ultras_producer, ultras_consumer])
     
     
