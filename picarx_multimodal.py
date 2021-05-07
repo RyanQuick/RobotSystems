@@ -38,7 +38,6 @@ def multimodal(speed):
     ultrasin_bus = Bus()
     ultrasout_bus = Bus()
     
-    
     stopsign = Bus(False)
     
     grayscale_producer = Producer(grayin_bus.set_message(s.get_adc_value(),"grayscale_in"), grayin_bus, delay = sensor_delay, termination_busses = stopsign, name = "grayscale_producer")
