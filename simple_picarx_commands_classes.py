@@ -16,6 +16,7 @@ except ImportError:
 
 from picarx_classes import Motors, Sensors, Interpreters, Controllers, CVSteering
 from picarx_simultaneity import simultaneity
+from picarx_mulimodal import multimodal
 import time
 import cv2
 
@@ -78,7 +79,10 @@ def cv_follow_line(speed):
 
 def gray_follow_line_bus(speed):
     simultaneity(speed)
-        
+    
+def gray_follow_line_rossros(speed):
+    multimodal(speed)
+    
 
 if __name__ == "__main__":
     m = Motors()
@@ -86,7 +90,8 @@ if __name__ == "__main__":
     i = Interpreters()
     c = Controllers()
     cvs = CVSteering()
-    choice = input('Choose an action to take: (park, forward, kturn, grayfollow, camerafollow, grayfollow2)')
+    choice = input('Choose an action to take: (park, forward, kturn, \
+                   grayfollow, camerafollow, grayfollow2, grayfollow3)')
     if choice == 'forward':
         print('moving forward...')
         move_forward(m,50,2,0)
@@ -107,7 +112,7 @@ if __name__ == "__main__":
         gray_follow_line_bus(0)
     elif choice == 'grayfollow3':
         print('Following a line using RossROS & grayscale sensor')
-        gray_follow_line_bus(0)
+        gray_follow_line_rossros(0)
     else:
         print('did nothing...')
         pass
