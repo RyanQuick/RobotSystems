@@ -40,14 +40,14 @@ def multimodal(speed):
     stopsign = Bus(False)
     
     grayscale_producer = Producer(grayin_bus.set_message(s.get_adc_value(),adc_busvar), grayin_bus, delay = sensor_delay, termination_busses = stopsign, name = "grayscale_producer")
-    logging.info("Bus Value: {0}".format(i.get_grayscale_value(grayin_bus.get_message(adc_busvar))))
+    # logging.info("Bus Value: {0}".format(i.get_grayscale_value(grayin_bus.get_message(adc_busvar))))
     grayscale_cp = ConsumerProducer(grayout_bus.set_message(i.get_grayscale_value(grayin_bus.get_message(adc_busvar)),relative_pos), grayin_bus, grayout_bus, delay = interpreter_delay, termination_busses = stopsign, name = "grayscale_cp")
-    logging.info("Bus Value: {0}".format(grayout_bus.get_message(relative_pos)))
+    # logging.info("Bus Value: {0}".format(grayout_bus.get_message(relative_pos)))
     grayscale_consumer = Consumer(c.line_following(m, grayout_bus.get_message(relative_pos)[0], speed), grayout_bus, delay = interpreter_delay, termination_busses = stopsign, name = "grayscale_consumer")
     
-    #ultras_producer = Producer(ultras_bus.set_message(s.get_distance(),ultras_busvar),ultras_bus, delay = sensor_delay, name = "ultras_producer")
-    #ultras_consumer = Consumer(c.wall_checking(m, ultras_bus.get_message(ultras_busvar)),delay = controller_delay, name = "ultras_cp")
+    ultras_producer = Producer(ultras_bus.set_message(s.get_distance(),ultras_busvar),ultras_bus, delay = sensor_delay, name = "ultras_producer")
+    ultras_consumer = Consumer(c.wall_checking(m, ultras_bus.get_message(ultras_busvar)),delay = controller_delay, name = "ultras_cp")
     # logging.info("made it here")
-    runConcurrently([grayscale_producer, grayscale_cp, grayscale_consumer])#, ultras_producer, ultras_consumer])
+    runConcurrently([grayscale_producer, grayscale_cp, grayscale_consumer, ultras_producer, ultras_consumer])
     
     
