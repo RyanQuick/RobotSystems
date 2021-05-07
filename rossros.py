@@ -122,6 +122,7 @@ class ConsumerProducer:
         values = []
 
         # Loop over the busses, recording their values
+        logging.info("All Busses: {0}".format(busses))
         for p in busses:
             logging.info("Bus Title: {0}".format(p))
 
