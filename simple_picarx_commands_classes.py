@@ -16,7 +16,7 @@ except ImportError:
 
 from picarx_classes import Motors, Sensors, Interpreters, Controllers, CVSteering
 from picarx_simultaneity import simultaneity
-from picarx_mulimodal import multimodal
+from picarx_multimodal import multimodal
 import time
 import cv2
 
