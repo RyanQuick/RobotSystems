@@ -329,7 +329,7 @@ def runConcurrently(producer_consumer_list):
 
     # Loop over the executors that were created above, running their result methods
         logging.info("finished thinking about buses")
-
+    logging.info("future list: {0}".format(executor_list))
     for e in executor_list:
         logging.info("bus list executions: {0}".format(e))
         e.result()
