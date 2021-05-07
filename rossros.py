@@ -123,6 +123,8 @@ class ConsumerProducer:
 
         # Loop over the busses, recording their values
         for p in busses:
+            logging.info("Bus Title: {0}".format(p))
+
             values.append(p.get_message(self.name))
 
         return values
