@@ -39,8 +39,8 @@ def multimodal(speed):
     ultrasout_bus = Bus()
     
     grayscale_producer = Producer(s.get_adc_value(), grayin_bus, delay = sensor_delay, name = "grayscale_producer")
-    grayscale_cp = ConsumerProducer(i.get_grayscale_value(grayin_bus.get_message()), grayin_bus, grayout_bus, delay = interpreter_delay, name = "grayscale_cp")
-    grayscale_consumer = Consumer(c.line_following(m, grayout_bus.get_message("grayscale_producer"), speed),grayout_bus, delay = interpreter_delay, name = "grayscale_cp")
+    grayscale_cp = ConsumerProducer(i.get_grayscale_value(grayin_bus.get_message("grayscale_cp")), grayin_bus, grayout_bus, delay = interpreter_delay, name = "grayscale_cp")
+    grayscale_consumer = Consumer(c.line_following(m, grayout_bus.get_message("grayscale_consumer"), speed),grayout_bus, delay = interpreter_delay, name = "grayscale_consumer")
     
     #ultras_producer = Producer(s.get_distance(), delay = sensor_delay, name = "ultras_producer")
     #ultras_consumer = Consumer(c.wall_checking(m, ultrasout_bus.get_message()),delay = interpreter_delay, name = "ultras_cp")
