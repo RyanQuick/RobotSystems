@@ -32,6 +32,10 @@ def multimodal(speed):
     c = Controllers()
     m = Motors()
     
+    adc_busvar = 0
+    relative_pos = 0
+    
+    
     grayin_bus = Bus()
     grayout_bus = Bus()
     
