@@ -252,6 +252,7 @@ class Interpreters:
 
     
     def get_grayscale_value(self, adcs):
+        logging.info("adcs: {0}".format(adcs))
         if abs(adcs[0] - adcs[2]) > self.sensitivity:
             if adcs[0] < adcs[2]:
                 if adcs[0] + abs((adcs[2]-adcs[0])/4) > adcs[1]:
