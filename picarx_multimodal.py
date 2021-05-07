@@ -32,12 +32,18 @@ def multimodal(speed):
     c = Controllers()
     m = Motors()
     
+    grayin_bus = Bus()
+    grayout_bus = Bus()
+    
+    ultrasin_bus = Bus()
+    ultrasout_bus = Bus()
+    
     grayscale_producer = Producer(s.get_adc_value(),delay = sensor_delay, name = "grayscale_producer")
     grayscale_cp = ConsumerProducer(i.get_grayscale_value(),delay = interpreter_delay, name = "grayscale_cp")
-    grayscale_consumer = Consumer(c.line_following(m, out_bus.read(), speed),delay = interpreter_delay, name = "grayscale_cp")
+    grayscale_consumer = Consumer(c.line_following(m, grayout_bus.read(), speed),delay = interpreter_delay, name = "grayscale_cp")
     
     ultras_producer = Producer(s.get_distance(), delay = sensor_delay, name = "ultras_producer")
-    ultras_consumer = Consumer(c.wall_checking(m, out_bus.read()),delay = interpreter_delay, name = "ultras_cp")
+    ultras_consumer = Consumer(c.wall_checking(m, ultrasout_bus.read()),delay = interpreter_delay, name = "ultras_cp")
     print('made it here')
     runConcurrently([grayscale_producer, grayscale_cp, grayscale_consumer, ultras_producer, ultras_consumer])
     
