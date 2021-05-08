@@ -91,6 +91,11 @@ def simultaneity(speed):
         bus_controller = executor.submit(controller_consumer, out_bus, controller_delay, speed)
 
     # eSensor.result()
+    bus_sensor.result()
+    bus_interpreter.result()
+    bus_controller.result()
+
+
 
         
 if __name__ == "__main__":
