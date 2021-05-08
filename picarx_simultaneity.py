@@ -90,7 +90,7 @@ def simultaneity(speed):
         bus_interpreter = executor.submit(interpreter_cp, in_bus, out_bus, interpreter_delay)
         bus_controller = executor.submit(controller_consumer, out_bus, controller_delay, speed)
     
-    
+    logging.info("made it here")
     logging.info(bus_controller)
     # eSensor.result()
     bus_sensor.result()
