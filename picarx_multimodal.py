@@ -46,6 +46,6 @@ def multimodal(m,s,i,c, speed):
     # ultras_producer = Producer(s.get_distance, ultras_bus, delay = sensor_delay, termination_busses = stopsign, name = "ultras_producer")
     # ultras_consumer = Consumer(c.wall_checking, ultras_bus, termination_busses = stopsign, delay = interpreter_delay, name = "ultras_cp")
     logging.info("made it here")
-    runConcurrently([grayscale_producer, grayscale_cp, grayscale_consumer})# , ultras_producer, ultras_consumer])
+    runConcurrently([grayscale_producer, grayscale_cp, grayscale_consumer])# , ultras_producer, ultras_consumer])
     
     
