@@ -43,7 +43,7 @@ class DataBus:
         print(self.read())
 
 
-def sensor_producer(in_bus, delay):
+def sensor_producer(s, in_bus, delay):
     lock = Lock()
     while True:
         with lock:
