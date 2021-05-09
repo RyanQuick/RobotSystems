@@ -106,7 +106,7 @@ if __name__ == "__main__":
         simultaneity(m,s,i,c,0)
     elif choice == 'grayfollow3':
         print('Following a line using RossROS & grayscale sensor')
-        multimodal(m,s,i,c,speed)
+        multimodal(m,s,i,c,0)
     else:
         print('did nothing...')
         pass
