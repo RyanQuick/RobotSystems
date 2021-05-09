@@ -58,12 +58,7 @@ def k_turn(m, speed, length, direction=-1):
 #     m.camera_servo_pin2.angle(40)
 #     time.sleep(1)
 
-def gray_follow_line(m,s,i,c, speed):
-    m = Motors()
-    s = Sensors()
-    i = Interpreters()
-    c = Controllers()
-    
+def gray_follow_line(m,s,i,c, speed):    
     while True:        
         [position, adcs] = i.get_grayscale_value(s.get_adc_value())
         # logging.info("Relative Position: {0}, adc1: {1}, adc2: {2}, adc3: {3}".format(position,adcs[0],adcs[1],adcs[2]))
