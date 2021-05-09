@@ -63,6 +63,11 @@ def gray_follow_line(m,s,i,c, speed):
         position = i.get_grayscale_value(s.get_adc_value())
         # logging.info("Relative Position: {0}".format(position))
         c.line_following(position, speed)
+        
+def wall_stop(s,c):
+    while True: 
+        distance = s.get_distance()
+        c.wall_checking(distance)
 
 def cv_follow_line(cvs, c, speed):
     while True:
@@ -107,6 +112,9 @@ if __name__ == "__main__":
     elif choice == 'grayfollow3':
         print('Following a line using RossROS & grayscale sensor')
         multimodal(m,s,i,c,0)
+    elif choice == 'wallstop':
+        print('Following a line using RossROS & grayscale sensor')
+        wall_stop(s,c)
     else:
         print('did nothing...')
         pass
