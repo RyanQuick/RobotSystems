@@ -221,10 +221,10 @@ class Sensors:
         return adc_value_list  
 
     def get_distance(self):
-        timeout=0.01
+        timeout=0.05
     
         self.trig.low()
-        time.sleep(0.05)
+        time.sleep(0.01)
         self.trig.high()
         time.sleep(0.000015)
         self.trig.low()
