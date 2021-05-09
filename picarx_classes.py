@@ -221,7 +221,6 @@ class Sensors:
         return adc_value_list  
 
     def get_distance(self):
-        logging.info("trying to get the distance")
         timeout=0.01
     
         self.trig.low()
@@ -232,6 +231,8 @@ class Sensors:
         pulse_end = 0
         pulse_start = 0
         timeout_start = time.time()
+        logging.info("echo: {0}".format(self.echo.value()))
+
         while self.echo.value()==0:
             pulse_start = time.time()
             if pulse_start - timeout_start > timeout:
