@@ -268,24 +268,24 @@ class Interpreters:
             rob_pos = 0
                 
                 
-        return rob_pos, adcs
+        return rob_pos
           
 
 class Controllers:
     
-    def __init__(self):
+    def __init__(self,m):
        self.line_steering = -30 
-        
-    def line_following(self, m, rob_pos, speed):
+       self.m = m
+    def line_following(self, rob_pos, speed):
         logging.info("steering angle: {0}, speed: {1}".format(rob_pos*self.line_steering,speed))
-        m.set_dir_servo_angle(rob_pos*self.line_steering)
-        m.forward(speed)
+        self.m.set_dir_servo_angle(rob_pos*self.line_steering)
+        self.m.forward(speed)
         return rob_pos*self.line_steering
     
-    def wall_checking(self, m, cm):
+    def wall_checking(self, cm):
         if 0 < cm < 5:
             logging.info("About to hit an obstacle @ {0}".format(cm))
-            m.forward(0)
+            self.m.forward(0)
 
 class CVSteering:
     

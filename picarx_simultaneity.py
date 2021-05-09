@@ -76,7 +76,7 @@ def controller_consumer(out_bus, delay, speed):
         else:
             time.sleep(delay)
             
-def simultaneity(speed):
+def simultaneity(m,s,i,c, speed):
 
     sensor_delay = 0.2
     interpreter_delay = 0.2
