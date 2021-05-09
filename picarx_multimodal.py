@@ -35,7 +35,7 @@ def multimodal(m,s,i,c, speed):
     
     stopsign = Bus(False)
     
-    speed = Bus(initial_message = speed)
+    speed_bus = Bus(initial_message = speed)
     
 
     
