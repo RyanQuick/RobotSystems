@@ -39,7 +39,7 @@ class DataBus:
     
     def test(self):
         print(self.read())
-        self.write('a')
+        self.write('Testing read/write')
         print(self.read())
 
 
@@ -57,7 +57,7 @@ def interpreter_cp(i, in_bus, out_bus, delay):
     while True:
         # logging.info("in_bus: {0}".format(in_bus.read()))
         if in_bus.read() != None:
-            [position, adcs] = i.get_grayscale_value(in_bus.read())
+            position = i.get_grayscale_value(in_bus.read())
             out_bus.write(position)
             # logging.info("out bus: {0}".format(out_bus.read()))
             time.sleep(delay)

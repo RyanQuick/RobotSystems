@@ -41,9 +41,9 @@ def multimodal(m,s,i,c, speed):
     
     grayscale_producer = Producer(s.get_adc_value, grayin_bus, delay = sensor_delay, termination_busses = stopsign, name = "grayscale_producer") # Nigel says this works
     
-    # logging.info("Bus Value: {0}".format(i.get_grayscale_value(grayin_bus.get_message("adc_busvar"))))
+    logging.info("Bus 1 Value: {0}".format(i.get_grayscale_value(grayin_bus.get_message("adc_busvar"))))
     grayscale_cp = ConsumerProducer(i.get_grayscale_value, grayin_bus, grayout_bus, delay = interpreter_delay, termination_busses = stopsign, name = "grayscale_cp")
-    # logging.info("Bus Value: {0}".format(grayout_bus.get_message("relative_pos")))
+    logging.info("Bus 2 Value: {0}".format(grayout_bus.get_message("relative_pos")))
     grayscale_consumer = Consumer(c.line_following, (grayout_bus, speed_bus), delay = interpreter_delay, termination_busses = stopsign, name = "grayscale_consumer")
     
     ultras_producer = Producer(s.get_distance, ultras_bus, delay = sensor_delay, termination_busses = stopsign, name = "ultras_producer")
