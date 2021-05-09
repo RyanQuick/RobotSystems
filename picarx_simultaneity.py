@@ -64,10 +64,10 @@ def interpreter_cp(i, in_bus, out_bus, delay):
         else:
             time.sleep(delay)
     
-def controller_consumer(m, c, out_bus, delay, speed):
+def controller_consumer(c, out_bus, delay, speed):
     while True:
         if out_bus.read() != None:
-            c.line_following(m, out_bus.read(), speed)
+            c.line_following(out_bus.read(), speed)
             time.sleep(delay)
         else:
             time.sleep(delay)
@@ -84,7 +84,7 @@ def simultaneity(m,s,i,c, speed):
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         bus_sensor = executor.submit(sensor_producer, s, in_bus, sensor_delay)
         bus_interpreter = executor.submit(interpreter_cp, i, in_bus, out_bus, interpreter_delay)
-        bus_controller = executor.submit(controller_consumer, m, c, out_bus, controller_delay, speed)
+        bus_controller = executor.submit(controller_consumer, c, out_bus, controller_delay, speed)
     
     logging.info("made it here")
     logging.info(bus_controller)
