@@ -79,7 +79,7 @@ def gray_follow_line(m,s,i,c, speed):
 def wall_stop(s,c):
     while True: 
         distance = s.get_distance()
-        logging.info("Checking for walls: {0}".format(distance))
+        logging.info("distance reading: {0}".format(distance))
         c.wall_checking(distance)
 
 def cv_follow_line(cvs, c, speed):

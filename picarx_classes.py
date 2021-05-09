@@ -231,7 +231,7 @@ class Sensors:
         pulse_end = 0
         pulse_start = 0
         timeout_start = time.time()
-        logging.info("echo: {0}".format(self.echo.value()))
+        # logging.info("echo: {0}".format(self.echo.value()))
 
         while self.echo.value()==0:
             pulse_start = time.time()
@@ -240,7 +240,7 @@ class Sensors:
         while self.echo.value()==1:
             pulse_end = time.time()
             if pulse_end - timeout_start > timeout:
-                logging.info("pulse_end: {0} timeout_start: {1}".format(pulse_end,timeout_start))
+                # logging.info("pulse_end: {0} timeout_start: {1}".format(pulse_end,timeout_start))
                 return -2
         during = pulse_end - pulse_start
         cm = round(during * 340 / 2 * 100, 2)
