@@ -217,6 +217,7 @@ class Sensors:
         adc_value_list.append(self.S0.read())
         adc_value_list.append(self.S1.read())
         adc_value_list.append(self.S2.read())
+        logging.info("adcs: {0}".format(adc_value_list))
         return adc_value_list  
 
     def get_distance(self):
@@ -242,8 +243,8 @@ class Sensors:
                 return -2
         during = pulse_end - pulse_start
         cm = round(during * 340 / 2 * 100, 2)
-        #print(cm)
-        return during
+        logging.info("distance(cm): {0}".format(cm))
+        return cm
         
 class Interpreters:
     def __init__(self):
