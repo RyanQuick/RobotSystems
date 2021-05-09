@@ -99,7 +99,7 @@ class ConsumerProducer:
             # Collect all of the values from the input busses into a list
             input_values = self.collectBussesToValues(self.input_busses)
             
-            logging.info("input_values: {0}".format(input_values))
+            # logging.info("input_values: {0}".format(input_values))
             # Get the output value or tuple of values corresponding to the inputs
             output_values = self.consumer_producer_function(*input_values)
             
@@ -123,9 +123,9 @@ class ConsumerProducer:
         values = []
 
         # Loop over the busses, recording their values
-        logging.info("All Busses: {0}".format(busses))
+        # logging.info("All Busses: {0}".format(busses))
         for p in busses:
-            logging.info("Bus Title: {0}".format(p))
+            # logging.info("Bus Title: {0}".format(p))
 
             values.append(p.get_message(self.name))
 
