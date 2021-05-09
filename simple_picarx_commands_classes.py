@@ -67,6 +67,7 @@ def gray_follow_line(m,s,i,c, speed):
 def wall_stop(s,c):
     while True: 
         distance = s.get_distance()
+        logging.info("Checking for walls: {0}".format(distance))
         c.wall_checking(distance)
 
 def cv_follow_line(cvs, c, speed):
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     c = Controllers(m)
     cvs = CVSteering()
     choice = input('Choose an action to take: (park, forward, kturn, \
-                   grayfollow, camerafollow, grayfollow2, grayfollow3)')
+                   grayfollow, camerafollow, grayfollow2, grayfollow3, wallstop)')
     if choice == 'forward':
         print('moving forward...')
         move_forward(m,50,2,0)
