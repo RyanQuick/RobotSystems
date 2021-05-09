@@ -45,7 +45,6 @@ class DataBus:
 
 def sensor_producer(in_bus, delay):
     lock = Lock()
-    s = Sensors()
     while True:
         with lock:
             adcs = s.get_adc_value()
@@ -54,8 +53,7 @@ def sensor_producer(in_bus, delay):
         
     
     
-def interpreter_cp(in_bus, out_bus, delay):
-    i = Interpreters()
+def interpreter_cp(i, in_bus, out_bus, delay):
     while True:
         # logging.info("in_bus: {0}".format(in_bus.read()))
         if in_bus.read() != None:
@@ -66,9 +64,7 @@ def interpreter_cp(in_bus, out_bus, delay):
         else:
             time.sleep(delay)
     
-def controller_consumer(out_bus, delay, speed):
-    c = Controllers()
-    m = Motors()
+def controller_consumer(m, c, out_bus, delay, speed):
     while True:
         if out_bus.read() != None:
             c.line_following(m, out_bus.read(), speed)
@@ -86,9 +82,9 @@ def simultaneity(m,s,i,c, speed):
     
     
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        bus_sensor = executor.submit(sensor_producer, in_bus, sensor_delay)
-        bus_interpreter = executor.submit(interpreter_cp, in_bus, out_bus, interpreter_delay)
-        bus_controller = executor.submit(controller_consumer, out_bus, controller_delay, speed)
+        bus_sensor = executor.submit(sensor_producer, s, in_bus, sensor_delay)
+        bus_interpreter = executor.submit(interpreter_cp, i, in_bus, out_bus, interpreter_delay)
+        bus_controller = executor.submit(controller_consumer, m, c, out_bus, controller_delay, speed)
     
     logging.info("made it here")
     logging.info(bus_controller)

@@ -22,17 +22,12 @@ logging.basicConfig(level = logging.INFO) #format = logging_format, level = logg
 from logdecorator import log_on_start , log_on_end , log_on_error 
 
 
-def multimodal(speed):
+def multimodal(m,s,i,c, speed):
     sensor_delay = 0.2
     interpreter_delay = 0.2
     controller_delay = 0.2
     
-    s = Sensors()
-    i = Interpreters()
-    c = Controllers()
-    m = Motors()
-    
-    
+        
     grayin_bus = Bus()
     grayout_bus = Bus()
     
