@@ -221,6 +221,7 @@ class Sensors:
         return adc_value_list  
 
     def get_distance(self):
+        logging.info("trying to get the distance")
         timeout=0.01
     
         self.trig.low()
