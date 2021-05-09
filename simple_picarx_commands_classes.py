@@ -20,6 +20,18 @@ from picarx_multimodal import multimodal
 import time
 import cv2
 
+
+import logging
+logging_format = "%(asctime) s : %(message) s " 
+logging.basicConfig(level = logging.INFO) #format = logging_format, level = logging.INFO, )#datefmt ="% H :% M :% S ")
+
+# logging.getLogger().setLevel(logging.DEBUG) 
+# comment out this line to remove debugging comments
+# logging.debug (message) Use this line to print debugging info
+
+from logdecorator import log_on_start , log_on_end , log_on_error 
+
+
 def move_forward(m,speed,length,angle):
     m.set_dir_servo_angle(angle)
     m.forward(speed)
