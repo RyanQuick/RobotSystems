@@ -222,8 +222,6 @@ class Sensors:
 
     def get_distance(self):
         timeout=0.01
-        self.trig = Pin('D8')
-        self.echo = Pin('D9')
     
         self.trig.low()
         time.sleep(0.01)
