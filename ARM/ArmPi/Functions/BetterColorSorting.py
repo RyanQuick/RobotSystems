@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # coding=utf8
 import sys
-sys.path.append('/home/pi/ArmPi/')
+sys.path.append('/home/nigel/rob521/RobotSystems/ARM/ArmPi/')
 import cv2
 import time
 import Camera
@@ -9,7 +9,7 @@ import threading
 from LABConfig import *
 from ArmIK.Transform import *
 from ArmIK.ArmMoveIK import *
-import HiwonderSDK.Board as Board
+#import HiwonderSDK.Board as Board
 from CameraCalibration.CalibrationConfig import *
 
 if sys.version_info.major == 2:
@@ -78,14 +78,17 @@ class Sensing:
         self.last_x = 0
         self.last_y = 0
         self.world_X = 0
-        self. world_Y = 0
-        self. start_count_t1 = True
+        self.world_Y = 0
+        self.start_count_t1 = True
         self.t1 = 0
         self.detect_color = 'None'
         self.draw_color = range_rgb["black"]
         self.color_list = []
+        self.heights={'red':1.5,'green':1.5,'blue':1.5}
+        self.rot = 0
         self.size = (640,480)
         self.target_color = ('red', 'green', 'blue')
+        self.cube_pose = {}
        
     def pull_image(self, img):
         '''
@@ -138,9 +141,11 @@ class Sensing:
         '''
         
         if not self.start_pick_up:
-            color_area_max = None
-            max_area = 0
+            color_area_max = {}
+            max_area = {}
             areaMaxContour_max = [0,0]
+            areaMaxContour_max = {}
+            
             for i in color_range:
                 
                 if i in self.target_color:
@@ -150,10 +155,15 @@ class Sensing:
                     contours = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[-2]  #Find the Outline
                     areaMaxContour, area_max = self.get_area_max_contour(contours)  #Find the largest contour
                     if areaMaxContour is not None:
+                        areaMaxContour_max[i]=areaMaxContour
+                        max_area[i]=area_max
+                        color_area_max[i]=i
+                        '''
                         if area_max > max_area:# Find the largest area
                             max_area = area_max
                             color_area_max = i
                             areaMaxContour_max = areaMaxContour
+                        '''
             return areaMaxContour_max, max_area, color_area_max
 
                             
@@ -165,17 +175,27 @@ class Sensing:
         '''
         if not self.start_pick_up:
             self.rect = cv2.minAreaRect(areaMaxContour_max)
+            self.rot = self.rect[-1]
             box = np.int0(cv2.boxPoints(self.rect))
             self.roi = getROI(box) #Get ROI Area 
             self.get_roi = True
             img_centerx, img_centery = getCenter(self.rect, self.roi, self.size, square_length)  # Get the center coordinates of the wood block
-             
             world_x, world_y = convertCoordinate(img_centerx, img_centery, self.size) #Convert to real world Coordinates
+            #self.rot = self.get_rotation(img, areaMaxContour_max) # find the rotation
             cv2.drawContours(img, [box], -1, range_rgb[color_area_max], 2)
             cv2.putText(img, '(' + str(world_x) + ',' + str(world_y) + ')', (min(box[0, 0], box[2, 0]), box[2, 1] - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, range_rgb[color_area_max], 1) #Draw the center point
             return world_x, world_y
             
+        
+    def get_rotation(self, img, contour):
+        '''
+        INPUT: image, contour
+        OUTPUT: rotation int
+        finds rotation of cube corresponding to contour in image
+        '''
+        
+        
     def set_color(self, color_area_max):
         '''
         INPUT: Color string
@@ -193,7 +213,7 @@ class Sensing:
                 color = 0
             self.color_list.append(color)
                     
-    def position_confidence(self, world_x, world_y):
+    def position_confidence(self, world_x, world_y, color):
         '''
         INPUT: x,y in world coordinates of shape
         OUTPUT: ___
@@ -216,6 +236,7 @@ class Sensing:
                 rotation_angle = self.rect[2] 
                 self.start_count_t1 = True
                 self.world_X, self.world_Y = np.mean(np.array(self.center_list).reshape(self.count, 2), axis=0)
+                self.cube_pose[color] = [self.world_X,self.world_Y,self.height[color],self.rot]
                 self.center_list = []
                 self.count = 0
                 self.start_pick_up = True
@@ -352,7 +373,7 @@ class Moving():
                     time.sleep(1.5)
                 time.sleep(0.01)
 
-
+'''
 if __name__ == '__main__':
     initMove() # Move to starting position
     s = Sensing() # Initialize classes
@@ -367,6 +388,7 @@ if __name__ == '__main__':
     my_camera = Camera.Camera()
     my_camera.camera_open()
     
+    color_order = ['red', 'green', 'blue']
     while True:
         img = my_camera.frame
         if img is not None:
@@ -374,13 +396,15 @@ if __name__ == '__main__':
             p_frame, Frame = s.pull_image(frame)
             if not s.start_pick_up:
                 areaMaxContour_max, max_area, color_area_max = s.biggest_area(p_frame)
-            if max_area > 2500:  # Found the largest area
-                if not s.start_pick_up:
-                    world_x, world_y = s.draw_outline_color(Frame, areaMaxContour_max, max_area, color_area_max)
-                if not s.start_pick_up:    
-                    s.position_confidence(world_x, world_y)
-                if not s.start_pick_up:
-                    s.set_text_color(color_area_max)
+            
+            for i in color_order:
+                if max_area[i] > 2500:  # Found the largest area
+                    if not s.start_pick_up:
+                        world_x, world_y = s.draw_outline_color(Frame, areaMaxContour_max[i], max_area[i], color_area_max[i])
+                    if not s.start_pick_up:    
+                        s.position_confidence(world_x, world_y, i)
+                    if not s.start_pick_up:
+                        s.set_text_color(color_area_max[i])
                     
             # Draw text for seen object
             cv2.putText(Frame, "Color: " + s.detect_color, (10, Frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.65, s.draw_color, 2)
@@ -391,3 +415,4 @@ if __name__ == '__main__':
                 break
     my_camera.camera_close()
     cv2.destroyAllWindows()
+'''
