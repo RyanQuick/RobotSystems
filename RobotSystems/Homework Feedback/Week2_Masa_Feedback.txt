@@ -1,8 +1,0 @@
-Feedback on week 2 code:
-
-PROS:
-The work was well organized. Similar variables were lumped together. All global variables were removed and replaced with class functionality. Changes were well documented with commented labels referring to the section of the homework the changes reflected. (EX: # begin 2.8.1   #  end 2.8.1) The scripts also used some rules of thumb for variable labels such as CamelCase for class names and _ for spaces on function names. Informative variable names were chosen to help explain what they represent. 
-
-CONS:
-Did not use the logging method for displaying information during code execution.  Could have also used a class variable for  steering angle to reduce the number of input variables necessary for driving forward.
-There were few comments explaining what sections of code were useful for. 
