@@ -1,10 +1,5 @@
 #!/usr/bin/python3
 # coding=utf8
-'''
-Authors: Ameer Helmi, Ryan Quick, Nigel Swenson
-This code is used to stack cubes with the ArmPi
-It finds information about all 3 cubes, then stacks starting with red, then blue, then green
-'''
 import sys
 sys.path.append('/home/pi/ArmPi/')
 import cv2
@@ -49,11 +44,7 @@ def setBuzzer(timer):
     Board.setBuzzer(0)
 
 def move_thread(m):
-    '''
-    Used to define which move function is operating in the thread
-    '''
-    #m.pickup_cube()
-    m.stacking_cube()
+    m.pickup_cube()
     
 #set the rgb light color of the expansion board to make it consistent with the color to be tracked
 def set_rgb(color):
@@ -84,25 +75,18 @@ class Sensing:
         self.unreachable = False
         self.isRunning = True
         self.start_pick_up = False
-        self.stupid_pick_up = False
         self.rotation_angle = 0
         self.last_x = 0
         self.last_y = 0
         self.world_X = 0
-        self.world_Y = 0
-        self.start_count_t1 = True
+        self. world_Y = 0
+        self. start_count_t1 = True
         self.t1 = 0
         self.detect_color = 'None'
         self.draw_color = range_rgb["black"]
         self.color_list = []
-        self.height={'red':1.5,'green':1.5,'blue':1.5}
-        self.rot = 0
         self.size = (640,480)
-        self.all_color = ('red', 'green', 'blue')
-        self.target_color = ()
-        self.cube_pose = {}
-        self.img_centerx = 0
-        self.img_centery = 0
+        self.target_color = ('red', 'green', 'blue')
        
     def pull_image(self, img):
         '''
@@ -114,7 +98,6 @@ class Sensing:
         img_h, img_w = img.shape[:2]
         cv2.line(img, (0, int(img_h / 2)), (img_w, int(img_h / 2)), (0, 0, 200), 1)
         cv2.line(img, (int(img_w / 2), 0), (int(img_w / 2), img_h), (0, 0, 200), 1)
-        self.world_x_center, self.world_y_center = convertCoordinate(int(img_w/2),int(img_h/2), self.size) #Convert
 
 
         frame_resize = cv2.resize(img_copy, self.size, interpolation=cv2.INTER_NEAREST)
@@ -122,7 +105,7 @@ class Sensing:
         #If an area is detected with a recognized object, it will always be detected until there is no
         if self.get_roi and not self.start_pick_up:
             self.get_roi = False
-            # frame_gb = getMaskROI(frame_gb, self.roi, self.size)      
+            frame_gb = getMaskROI(frame_gb, self.roi, self.size)      
         frame_lab = cv2.cvtColor(frame_gb, cv2.COLOR_BGR2LAB)  # Convert Image to Lab Space
         return frame_lab, img
     
@@ -156,22 +139,22 @@ class Sensing:
         '''
         
         if not self.start_pick_up:
-            color_area_max = []
-            max_area = {}
+            color_area_max = None
+            max_area = 0
             areaMaxContour_max = [0,0]
-            areaMaxContour_max = {}
-            
             for i in color_range:
-                if i in self.all_color:
+                
+                if i in self.target_color:
                     frame_mask = cv2.inRange(frame_lab, color_range[i][0], color_range[i][1])  #perform bit operations on the original
                     opened = cv2.morphologyEx(frame_mask, cv2.MORPH_OPEN, np.ones((6,6),np.uint8))  #open operation
                     closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, np.ones((6,6),np.uint8))#closed operation
                     contours = cv2.findContours(closed, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[-2]  #Find the Outline
                     areaMaxContour, area_max = self.get_area_max_contour(contours)  #Find the largest contour
                     if areaMaxContour is not None:
-                        areaMaxContour_max[i]=areaMaxContour # append to array
-                        max_area[i]=area_max
-                        color_area_max.append(i)
+                        if area_max > max_area:# Find the largest area
+                            max_area = area_max
+                            color_area_max = i
+                            areaMaxContour_max = areaMaxContour
             return areaMaxContour_max, max_area, color_area_max
 
                             
@@ -181,30 +164,19 @@ class Sensing:
         OUTPUT: x,y in world coordinates of shape
         Calculated largest area from all found contours & color
         '''
-
         if not self.start_pick_up:
             self.rect = cv2.minAreaRect(areaMaxContour_max)
-            self.rot = self.rect[-1]
             box = np.int0(cv2.boxPoints(self.rect))
-            roi = getROI(box) #Get ROI Area
+            self.roi = getROI(box) #Get ROI Area 
             self.get_roi = True
-            img_centerx, img_centery = getCenter(self.rect, roi, self.size, square_length)  # Get the center coordinates of the wood block
+            self.img_centerx, self.img_centery = getCenter(self.rect, self.roi, self.size, square_length)  # Get the center coordinates of the wood block
+             
             world_x, world_y = convertCoordinate(img_centerx, img_centery, self.size) #Convert to real world Coordinates
-            #self.rot = self.get_rotation(img, areaMaxContour_max) # find the rotation
             cv2.drawContours(img, [box], -1, range_rgb[color_area_max], 2)
             cv2.putText(img, '(' + str(world_x) + ',' + str(world_y) + ')', (min(box[0, 0], box[2, 0]), box[2, 1] - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, range_rgb[color_area_max], 1) #Draw the center point
             return world_x, world_y
             
-        
-    def get_rotation(self, img, contour):
-        '''
-        INPUT: image, contour
-        OUTPUT: rotation int
-        finds rotation of cube corresponding to contour in image
-        '''
-        
-        
     def set_color(self, color_area_max):
         '''
         INPUT: Color string
@@ -222,7 +194,7 @@ class Sensing:
                 color = 0
             self.color_list.append(color)
                     
-    def position_confidence(self, world_x, world_y, color):
+    def position_confidence(self, world_x, world_y):
         '''
         INPUT: x,y in world coordinates of shape
         OUTPUT: ___
@@ -230,21 +202,24 @@ class Sensing:
         Counter counts when shape hasn't moved
         Used to decide when to start grasp
         '''
-        distance = 0 # needed because distance between each cube will be too large
-        # math.sqrt(pow(world_x - self.last_x, 2) + pow(world_y - self.last_y, 2)) #Compare the last coordinate to determine whether to move 
-        #self.last_x, self.last_y = world_x, world_y     
-        # Cumulative judgement
         
+        
+        distance = math.sqrt(pow(world_x - self.last_x, 2) + pow(world_y - self.last_y, 2)) #Compare the last coordinate to determine whether to move 
+        self.last_x, self.last_y = world_x, world_y     
+        # Cumulative judgement 
         if distance < 0.5:
             self.count += 1
             self.center_list.extend((world_x, world_y))
-            rotation_angle = self.rect[2] 
-            self.start_count_t1 = True
-            self.world_X, self.world_Y = np.mean(np.array(self.center_list).reshape(self.count, 2), axis=0)
-            self.cube_pose[color] = [self.world_X,self.world_Y,self.height[color],self.rot] # store in cube pose for use in move thread
-            self.center_list = []
-            self.count = 0
-            self.stupid_pick_up = True # used to start movement
+            if self.start_count_t1:
+                self.start_count_t1 = False
+                self.t1 = time.time()
+            if time.time() - self.t1 > 1:
+                rotation_angle = self.rect[2] 
+                self.start_count_t1 = True
+                self.world_X, self.world_Y = np.mean(np.array(self.center_list).reshape(self.count, 2), axis=0)
+                self.center_list = []
+                self.count = 0
+                self.start_pick_up = True
         else:
             self.t1 = time.time()
             self.start_count_t1 = True
@@ -274,7 +249,8 @@ class Sensing:
             else:
                 self.detect_color = 'None'
                 self.draw_color = range_rgb["black"]
-            print("first seen color",self.detect_color)
+            print("first seen color",self.detect_color)                
+ 
  
 
 class Moving():
@@ -283,91 +259,94 @@ class Moving():
         self.stop = False
         self.unreachable = True
         self.rotation_angle = 0
+        self.num_cubes = 0
         self.goal = [0,0]
         self.target = [0,0]
         self.height = 1.5
         self.orientation = 0
 
-    def stacking_cube(self):
+    def stacking_cube(self, goal_coordinate):
         '''
-        Stacks cubes starting with red, then blue, then green
-        Uses sensing to find locations of all 3 cubes then stacks in order
+        x,y,z,orientation of each cube
+        i take those and do things
         '''
-        
         while True:
-            if self.s.start_pick_up:
-                time.sleep(.5)
-                # check if red has coordinates. if not, then blue or green needs to be picked up
-                if self.s.cube_pose['red'] != None:
-                    dist = np.sqrt((self.s.world_x_center - self.s.cube_pose['red'][0])**2 + (self.s.world_y_center - self.s.cube_pose['red'][1])**2)
-                    if dist < 1.5:
-                        # this means red is in the middle and we should move to blue
-                        self.height = 4.5
-                        self.goal = [self.s.cube_pose['blue'][0], self.s.cube_pose['blue'][1]] # coordinate of block
-                        self.target = [self.s.world_x_center, self.s.world_y_center] # target location
-                        self.orientation = self.s.cube_pose['blue'][3]
-                    else:
-                        # red first because it is not in the center
-                        self.height = 1.5
-                        self.goal = [self.s.cube_pose['red'][0], self.s.cube_pose['red'][1]] # coordinate of block
-                        self.target = [self.s.world_x_center, self.s.world_y_center] # target location
-                        self.orientation = self.s.cube_pose['red'][3]
-                elif self.s.cube_pose['blue'] == None:
-                    # Return to the initial position if we are done
-                    initMove()  
-                    time.sleep(1.5)
-                elif self.s.cube_pose['red'] == None:
-                    # green last
-                    self.height = 7.5
-                    self.goal = self.s.cube_pose['green'][0], self.s.cube_pose['green'][1] # coordinate of block
-                    self.target = [self.s.world_x_center, self.s.world_y_center] # target location
-                    self.orientation = self.s.cube_pose['green'][3]
-                setBuzzer(0.1)
-                # find first goal
-                result = AK.setPitchRangeMoving((self.goal[0], self.goal[1], 7), -90, -90, 0)
-                if result == False:
-                    self.unreachable = True
+            self.num_cubes = len(self.s.cube_pose)
+            # how many objects do i have?
+            if self.num_cubes == 3:
+                dist = np.sqrt((self.s.img_centerx - self.s.cube_pose['red'][0])**2 + (self.s.img_centery - self.s.cube_pose['red'][1])**2)
+                if dist < 1.5:
+                    # this means red is in the middle and we should move to blue
+                    self.height = 4.5
+                    self.goal = [self.s.cube_pose['blue'][0], self.s.cube_pose['blue'][1]]
+                    self.target = [self.s.cube_pose['red'][0], self.s.cube_pose['red'][1]]
+                    self.orientation = self.s.cube_pose['blue'][3]
+                    self.rgb('blue')
                 else:
-                    self.unreachable = False
-                    time.sleep(result[2]/1000) #If you can reach the specified location, get the running time
-                    # angle for gripper to be rotated to not be in the way
-                    servo2_angle = getAngle(self.goal[0], self.goal[1], self.orientation)
-                    Board.setBusServoPulse(1, servo1 - 280, 500)  # Paws Open
-                    Board.setBusServoPulse(2, servo2_angle, 500)
-                    time.sleep(0.5)
-                    # move down to height
-                    AK.setPitchRangeMoving((self.goal[0], self.goal[1], 1.5), -90, -90, 0, 1000)
-                    time.sleep(1.5)
-                    # holder closure 
-                    Board.setBusServoPulse(1, servo1, 500) 
-                    time.sleep(0.8)
-                    # close and lift up
-                    Board.setBusServoPulse(2, 500, 500)
-                    AK.setPitchRangeMoving((self.goal[0], self.goal[1], 12), -90, -90, 0, 1000)
-                    time.sleep(1)
-                    # move to target position at 12 height
-                    result = AK.setPitchRangeMoving((self.target[0], self.target[1], 12), -90, -90, 0)   
-                    time.sleep(result[2]/1000)
-                    # move to orientation of target
-                    servo2_angle = getAngle(self.target[0], self.target[1], -90)
-                    Board.setBusServoPulse(2, servo2_angle, 500)
-                    time.sleep(0.5)
-                    # drop to right height
-                    AK.setPitchRangeMoving((self.target[0], self.target[1], self.height), -90, -90, 0, 1000)
-                    time.sleep(2) # take time before opening to ensure object does not fall out
-                    # Open the Claws, Put down the object
-                    Board.setBusServoPulse(1, servo1 - 200, 500)
-                    time.sleep(0.8)
-                    # lift back up some
-                    AK.setPitchRangeMoving((self.target[0], self.target[1], 12), -90, -90, 0, 800)
-                    time.sleep(0.8)
-                    # Return to the initial position
-                    initMove()  
-                    time.sleep(1.5)
-                    self.s.start_pick_up = False
+                    # red first
+                    self.goal = [self.s.cube_pose['red'][0], self.s.cube_pose['red'][1]]
+                    self.target = [self.s.img_centerx, self.s.img_centery]
+                    self.orientation = self.s.cube_pose['red'][3]
+                    self.rgb('red')
+            elif self.num_cubes == 2:
+                # green last
+                self.height = 7.5
+                self.goal = self.s.cube_pose['green'][0], self.s.cube_pose['green'][1]
+                self.target = [self.s.cube_pose['blue'][0], self.s.cube_pose['blue'][1]]
+                self.orientation = self.s.cube_pose['green'][3]
+                self.rgb('green')
+            elif self.num_cubes == 1:
+                # Return to the initial position
+                initMove()  
+                time.sleep(1.5)
+
+            setBuzzer(0.1)
+            # find first goal
+            result = AK.setPitchRangeMoving((self.goal[0], self.goal[1], 7), -90, -90, 0)  
+            if result == False:
+                self.unreachable = True
             else:
-                 time.sleep(.01)
-                 
+                self.unreachable = False
+                time.sleep(result[2]/1000) #If you can reach the specified location, get the running time
+                # angle for gripper to be rotated to not be in the way
+                servo2_angle = getAngle(self.goal[0], self.goal[1], self.orientation)
+                Board.setBusServoPulse(1, servo1 - 280, 500)  # Paws Open
+                Board.setBusServoPulse(2, servo2_angle, 500)
+                time.sleep(0.5)
+                # move down to height
+                AK.setPitchRangeMoving((self.goal[0], self.goal[1], self.height), -90, -90, 0, 1000)
+                time.sleep(1.5)
+                # holder closure 
+                Board.setBusServoPulse(1, servo1, 500) 
+                time.sleep(0.8)
+                # close and lift up
+                Board.setBusServoPulse(2, 500, 500)
+                AK.setPitchRangeMoving((self.goal[0], self.goal[1], 12), -90, -90, 0, 1000)
+                time.sleep(1)
+                # move to target position at 12 height
+                result = AK.setPitchRangeMoving((self.target[0], self.target[1], 12), -90, -90, 0)   
+                time.sleep(result[2]/1000)
+                # move to orientation of target
+                servo2_angle = getAngle(self.target[0], self.target[1], self.orientation)
+                Board.setBusServoPulse(2, servo2_angle, 500)
+                time.sleep(0.5)
+                # drop to slightly above height
+                AK.setPitchRangeMoving((self.target[0], self.target[1], self.height+3), -90, -90, 0, 500)
+                time.sleep(0.5)
+                # drop to right height
+                AK.setPitchRangeMoving((self.target[0], self.target[1], self.height), -90, -90, 0, 1000)
+                time.sleep(0.5)
+                # Open the Claws, Put down the object
+                Board.setBusServoPulse(1, servo1 - 200, 500)
+                time.sleep(0.8)
+                # lift back up some
+                AK.setPitchRangeMoving((self.target[0], self.target[1], 12), -90, -90, 0, 800)
+                time.sleep(0.8)
+                # Return to the initial position
+                initMove()  
+                time.sleep(1.5)                
+
+                    
     def pickup_cube(self):
         #place coordinates
         coordinate = {
@@ -380,7 +359,7 @@ class Moving():
                 
                 
                 if self.s.detect_color != 'None' and self.s.start_pick_up:  #if it is detected that the block has not moved for a period of time, start to pick up. 
-                    # print("Picking up ", self.s.detect_color)                    #Move to the target position, height 6cm, judge whether the pos can be reached by the returned result
+                    print("Picking up ", self.s.detect_color)                    #Move to the target position, height 6cm, judge whether the pos can be reached by the returned result
                     #If the running time parameter is not given it will automatically be calculated and returned by the result.
                     set_rgb(self.s.detect_color)
                     setBuzzer(0.1)
@@ -463,7 +442,6 @@ class Moving():
                 time.sleep(0.01)
 
 
-
 if __name__ == '__main__':
     initMove() # Move to starting position
     s = Sensing() # Initialize classes
@@ -478,7 +456,6 @@ if __name__ == '__main__':
     my_camera = Camera.Camera()
     my_camera.camera_open()
     
-    color_order = ['red', 'green', 'blue']
     while True:
         img = my_camera.frame
         if img is not None:
@@ -486,25 +463,14 @@ if __name__ == '__main__':
             p_frame, Frame = s.pull_image(frame)
             if not s.start_pick_up:
                 areaMaxContour_max, max_area, color_area_max = s.biggest_area(p_frame)
-
-            for i in color_order:
-                try:
-                    if max_area[i] > 5000:  # Found the largest area, needs to be large to ensure parts of blocks aren't seen
-                        if not s.start_pick_up:
-                            world_x, world_y = s.draw_outline_color(Frame, areaMaxContour_max[i], max_area[i], i)
-                        if not s.start_pick_up:
-                            s.position_confidence(world_x, world_y, i)
-                        if not s.start_pick_up:
-                            s.set_text_color(i)
-                    else:
-                        s.cube_pose[i]=None
-                except Exception as e:
-                    print(e)
-                    s.cube_pose[i]=None
-            # used to start picking up objects
-            if s.stupid_pick_up == True:
-                s.start_pick_up = True
-                s.stupid_pick_up = False             
+            if max_area > 2500:  # Found the largest area
+                if not s.start_pick_up:
+                    world_x, world_y = s.draw_outline_color(Frame, areaMaxContour_max, max_area, color_area_max)
+                if not s.start_pick_up:    
+                    s.position_confidence(world_x, world_y)
+                if not s.start_pick_up:
+                    s.set_text_color(color_area_max)
+                    
             # Draw text for seen object
             cv2.putText(Frame, "Color: " + s.detect_color, (10, Frame.shape[0] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.65, s.draw_color, 2)
             cv2.imshow('Frame', Frame)
