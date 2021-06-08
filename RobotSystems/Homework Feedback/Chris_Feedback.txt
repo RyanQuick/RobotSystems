@@ -1,0 +1,5 @@
+It looks like you used descriptive function names and variables with _ for spaces, which is great. Your class names are also CamelCase, which also follows "best practices" from what I understand. There's also even some function descriptions that include what the function does as well as its inputs/outputs. There's some individual comments sprinkled throughout the code to help describe what important lines of code are doing, which is also helpful. Your variables are also grouped together by type, which makes your code much easier to read.
+
+
+One thing you could have done is add some way of debugging your work, such as a def test() function or logging methods. Overall nice job on your code this week!
+	
