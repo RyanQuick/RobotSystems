@@ -1,7 +1,17 @@
+
+Project Summary:
 Our project involves stacking the three cubes atop eachother. The code will look for cubes using our improved perception code from past weeks and save the x,y,height of each cube stack, and orientation of each cube in a dictionary. 
 
 In a separate thread, our motion code will be waiting for the perception code to finish looking for cubes and see at least 1 cube. It will then look to see what cubes are on the mat. If it sees a red cube, and the distance between the red cube and the center is too far, it will set the red cube as the pickup cube. If the red cube is close enough to the center, it will set the blue cube as the pickup cube. If there is no red cube showing, then the green cube is set as the pickup cube. This should happen when the blue cube covers up the red cube on the stack in the middle. Finally if, the blue cube is covered, then the code is finished and the stack is complete. After a pickup cube is selected, the arm goes to the pickup cube, and grabs it. Then the arm drives the cube to the stack and places it. It then goes back to the robot arm home position. This code iterates until the stack is complete. 
 
+
+What I learned this week:
 This week, I learned a lot more about how the perception code saves data for each cube. Our group had issues with the timer and distance tools used to make sure the objects are stable and not moving before classifying them as cubes. We were trying to save the data of all cubes every time step, but the problem was the timer and distance logic weren't built for each cube individually. We had issues keeping a timer per cube and the coordinates at the old time for each cube. We also learned about how the preexisting code categorizes each cube as a particular color or not as a cube. It uses HSV rather than RGB, which was unexpected. We were working on this project during the night, and some cubes weren't being correctly labeled as cubes due to the lighting. We tried altering the min and max HSV values, but ended up figuring out a lighting fix instead.
 
  
+FlowChart:
+See attached Image
+
+Video:
+
+See main file submission

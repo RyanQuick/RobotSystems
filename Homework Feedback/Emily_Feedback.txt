@@ -1,0 +1,10 @@
+Code review of “Arm week 5" Partner's work
+It looks like you used descriptive function names and variables with _ for spaces, so that's good. Your class names are also CamelCase, which also follows "best practices" from what I understand. You've also replaced/removed all global variables, which I appreciate. I'm personally not a big fan, but they do have their place. Your code looks a lot cleaner without the unnecessary variables in the provided code.
+
+One thing you could have done is add some way of debugging your work, such as a def test() function or logging methods. The amount of comments in your code is fairly light, so adding some succent comments to cover some of the less clear code components would be good.
+ 
+Overall nice job on your code this week!
+
+
+Code review of your project from “Arm week 5”
+Ryan and his team’s final project code is clear, and well-organized in classes with description commenting in most functions. I can see where the provided code was adapted and extended such that it would work more effectively for their final project objectives. I would be interested to see what additional changes to the provided code this team might make given more time, perhaps in the context of angle optimization or a different inverse kinematics solver. I was particularly fond of the description variable names, and the one that takes the cake for me was definitely stupid_pick_up (either True or False denoting method). It clearly describes the functionality while increasing team morale. Top notch work. Other than that, I think it helps organization-wise to keep the movement and sensing code in separate files, just for simplicity and ease of understanding. Overall though, great job!
